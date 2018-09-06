@@ -86,9 +86,9 @@ Create a Web API that will provide persistence to your JavaScript application (f
 
 ##### Learn what is [repository pattern](http://blog.sapiensworks.com/post/2014/06/02/The-Repository-Pattern-For-Dummies.aspx)
 ##### Learn what [dependency injection or inversion of control or Holywood principle](http://www.javaworld.com/article/2071914/excellent-explanation-of-dependency-injection--inversion-of-control-.html) principles refer to and what [Unity](https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/dependency-injection) is
-##### Learn what is [NSubstitute](http://nsubstitute.github.io/help/getting-started/)
+##### Learn what is [NSubstitute](http://nsubstitute.github.io/help/getting-started/) 
 ##### Extend your API with a dummy repository (database layer) that will be injected into controller (along with any other current dependencies)
- * One might encounter problems with [obtaining an instance of *HttpRequestMessage* outside API controller](http://www.jamienordmeyer.net/2014/11/23/getting-the-current-httprequestmessage-outside-of-apicontroller-2/)
+ * One might encounter problems with [obtaining an instance of *HttpRequestMessage* outside API controller](https://stackoverflow.com/questions/16670329/how-to-access-the-current-httprequestmessage-object-globally) 
  * Repository itself and routing does not have to be covered by tests
 
 #### TASK 3 - Connect mongoDB and finish GET</ins>POST+DELETE
@@ -96,7 +96,7 @@ Create a Web API that will provide persistence to your JavaScript application (f
 ##### Sanitize secrets (a.k.a private connection string)
  * you will provide yourself with a database URL and username and password later in this task, let's looks on web application secrets topic and prepare our ground for them properly.
  * Understand why a connection string must not be in code directly and should not be a part of *database layer*
- * Make sure your connection string (or any other sensitive/instance-specific/secret information) is not checked-in in your public GitHub repository
+ * Make sure your connection string (or any other sensitive/instance-specific/secret information) is not checked-in in your public GitHub repository 
  * Store your secrets in [web.config](https://msdn.microsoft.com/en-us/library/ms733932.aspx) file of your *presentation layer*
  * Sanitize your *web.config* based on [this article](http://johnatten.com/2014/04/06/asp-net-mvc-keep-private-settings-out-of-source-control/)
  * Do not forget your [connection string is a dependency](http://www.devtrends.co.uk/blog/configuration-settings-are-a-dependency-that-should-be-injected)
@@ -114,7 +114,7 @@ Create a Web API that will provide persistence to your JavaScript application (f
 
 #### (optional) TASK 4 - Finish remaining HTTP verbs
 
-##### Finish remaining [CRUD](https://en.wikipedia.org/wiki/Create,*read,_update_and*delete) operations (update) and eventually (extra optional) patch
+##### Finish remaining [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations (update) and eventually (extra optional) patch
 ##### Finish interconnecting with your JS application
 
 #### (optional) TASK 5 - Publish CS apps online
