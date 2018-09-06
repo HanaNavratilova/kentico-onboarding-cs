@@ -1,4 +1,6 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Routing;
+using Microsoft.Web.Http.Routing;
 
 namespace MyPerfectOnboarding.Api
 {
@@ -6,13 +8,18 @@ namespace MyPerfectOnboarding.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            config.MapHttpAttributeRoutes();
+            var constraintResolver = new DefaultInlineConstraintResolver()
+            {
+                ConstraintMap =
+                {
+                    ["apiVersion"] = typeof( ApiVersionRouteConstraint )
+                }
+            };
+            config.MapHttpAttributeRoutes(constraintResolver);
+            config.AddApiVersioning();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{version}/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            json.UseDataContractJsonSerializer = true;
         }
     }
 }

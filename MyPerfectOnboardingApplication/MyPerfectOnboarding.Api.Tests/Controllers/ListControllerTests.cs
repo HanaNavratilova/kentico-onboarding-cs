@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.Build.Tasks;
 using MyPerfectOnboarding.Api.Controllers;
 using MyPerfectOnboarding.Api.Models;
+using MyPerfectOnboarding.Api.Tests.Utils;
 using NUnit.Framework;
 
 namespace MyPerfectOnboarding.Api.Tests.Controllers
@@ -33,11 +32,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var response = await _listController.GetAsync();
 
-            var message = await response.ExecuteAsync(CancellationToken.None);
+            var message = await response.ExecuteAction();
 
             List<ListItem> items;
 
-            message.TryGetContentValue<List<ListItem>>(out items);
+            message.TryGetContentValue(out items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
@@ -51,11 +50,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             var response = await _listController.GetAsync(id);
 
-            var message = await response.ExecuteAsync(CancellationToken.None);
+            var message = await response.ExecuteAction();
 
             ListItem item;
 
-            message.TryGetContentValue<ListItem>(out item);
+            message.TryGetContentValue(out item);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
@@ -64,15 +63,15 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         }
 
         [Test]
-        public async Task Post_OkReturned()
+        public async Task Post_CreatedReturned()
         {
             var newItem = new ListItem(Guid.NewGuid(), "newItem", false, DateTime.Now, DateTime.Now);
 
             var response = await _listController.PostAsync(newItem);
 
-            var message = await response.ExecuteAsync(CancellationToken.None);
+            var message = await response.ExecuteAction();
 
-            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
 
         [Test]
@@ -86,13 +85,13 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             var response = await _listController.PutAsync(id, item);
 
-            var message = await response.ExecuteAsync(CancellationToken.None);
+            var message = await response.ExecuteAction();
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]
-        public async Task Delete_OkReturned()
+        public async Task Delete_NoContentReturned()
         {
             var index = 1;
 
@@ -100,9 +99,9 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             var response = await _listController.DeleteAsync(id);
 
-            var message = await response.ExecuteAsync(CancellationToken.None);
+            var message = await response.ExecuteAction();
 
-            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Caching;
 using System.Web.Http;
 using Microsoft.Web.Http;
 using MyPerfectOnboarding.Api.Models;
@@ -13,7 +9,7 @@ using MyPerfectOnboarding.Api.Models;
 namespace MyPerfectOnboarding.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [RoutePrefix("api/v{version:apiVersion}/List")]
+    [Route("api/v{version:apiVersion}/List")]
     public class ListController : ApiController
     {
         public List<ListItem> items = new List<ListItem>
@@ -39,7 +35,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
             items.Add(item);
-            return await Task.FromResult((IHttpActionResult)Ok());
+            return await Task.FromResult((IHttpActionResult)Created("api/v{version}/List", item));
         }
 
         [HttpPut]
@@ -55,7 +51,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
             items.Remove(items.Find(item => item.Id == id));
-            return await Task.FromResult((IHttpActionResult)Ok());
+            return await Task.FromResult((IHttpActionResult)StatusCode(HttpStatusCode.NoContent));
         }
 
     }

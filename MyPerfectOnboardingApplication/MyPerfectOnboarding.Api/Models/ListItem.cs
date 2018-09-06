@@ -45,14 +45,14 @@ namespace MyPerfectOnboarding.Api.Models
             set => _isActive = value;
         }
 
-        [DataMember]
+       [DataMember]
         public DateTime CreationTime
         {
             get => _creationTime;
             set => _creationTime = value;
         }
 
-        [DataMember]
+       [DataMember]
         public DateTime LastUpdateTime
         {
             get => _lastUpdateTime;
