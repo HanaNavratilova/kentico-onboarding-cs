@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,46 +29,30 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_ReturnsListOfItems()
         {
-            var response = await _listController.GetAsync();
+            var message = await _listController.ExecuteAction(controller => controller.GetAsync());
 
-            var message = await response.ExecuteAction();
-
-            List<ListItem> items;
-
+            List <ListItem> items;
             message.TryGetContentValue(out items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-            Assert.That(items, Is.InstanceOf<List<ListItem>>());
         }
 
         [Test]
         public async Task Get_ReturnsItemWithGivenId()
         {
-            Guid id = _listController.items.First().Id;
+            var id = new Guid();
 
-            var response = await _listController.GetAsync(id);
-
-            var message = await response.ExecuteAction();
-
-            ListItem item;
-
-            message.TryGetContentValue(out item);
+            var message = await _listController.ExecuteAction(controller => controller.GetAsync(id));
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-            Assert.That(item, Is.InstanceOf<ListItem>());
-            Assert.That(item.Id, Is.EqualTo(id));
         }
 
         [Test]
         public async Task Post_CreatedReturned()
         {
-            var newItem = new ListItem(Guid.NewGuid(), "newItem", false, DateTime.Now, DateTime.Now);
+            var newItem = new ListItem{Id = Guid.NewGuid(), Text = "newItem", IsActive = false, CreationTime = DateTime.Now, LastUpdateTime = DateTime.Now};
 
-            var response = await _listController.PostAsync(newItem);
-
-            var message = await response.ExecuteAction();
+            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
@@ -77,29 +60,21 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Put_OkReturned()
         {
-            var index = 1;
+            var id = new Guid();
 
-            var id = _listController.items.ElementAt(index).Id;
+            var item = new ListItem{ Id = id, Text = "newItem", IsActive = false, CreationTime = DateTime.Now, LastUpdateTime = DateTime.Now };
 
-            var item = new ListItem(id, "item", false, DateTime.Now, DateTime.Now);
+            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
 
-            var response = await _listController.PutAsync(id, item);
-
-            var message = await response.ExecuteAction();
-
-            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
         [Test]
         public async Task Delete_NoContentReturned()
         {
-            var index = 1;
+            var id = new Guid();
 
-            var id = _listController.items.ElementAt(index).Id;
-
-            var response = await _listController.DeleteAsync(id);
-
-            var message = await response.ExecuteAction();
+            var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }

@@ -17,9 +17,6 @@ namespace MyPerfectOnboarding.Api
             };
             config.MapHttpAttributeRoutes(constraintResolver);
             config.AddApiVersioning();
-
-            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            json.UseDataContractJsonSerializer = true;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -12,47 +11,24 @@ namespace MyPerfectOnboarding.Api.Controllers
     [Route("api/v{version:apiVersion}/List")]
     public class ListController : ApiController
     {
-        public List<ListItem> items = new List<ListItem>
-        {
-            new ListItem(Guid.NewGuid(), "aaaa", false, DateTime.MinValue, DateTime.MinValue),
-            new ListItem(Guid.NewGuid(), "dfads", false, DateTime.MinValue, DateTime.MinValue)
+        private ListItem[] items = {
+            new ListItem{Id = Guid.NewGuid(), Text = "aaaa", IsActive = false, CreationTime = DateTime.MinValue, LastUpdateTime = DateTime.MinValue},
+            new ListItem{Id = Guid.NewGuid(), Text = "dfads", IsActive = false, CreationTime = DateTime.MinValue, LastUpdateTime = DateTime.MinValue},
         };
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetAsync()
-        {
-            return await Task.FromResult((IHttpActionResult)Ok(items));
-        }
+        public async Task<IHttpActionResult> GetAsync() => await Task.FromResult(Ok(items));
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetAsync(Guid id)
-        {
-            var listItem = items.Find(item => item.Id == id);
-            return await Task.FromResult((IHttpActionResult)Ok(listItem));
-        }
+        public async Task<IHttpActionResult> GetAsync(Guid id) => await Task.FromResult(Ok(items[0]));
 
         [HttpPost]
-        public async Task<IHttpActionResult> PostAsync(ListItem item)
-        {
-            items.Add(item);
-            return await Task.FromResult((IHttpActionResult)Created("api/v{version}/List", item));
-        }
+        public async Task<IHttpActionResult> PostAsync(ListItem item) => await Task.FromResult(Created("api/v{version}/List", item));
 
         [HttpPut]
-        public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
-        {
-            var originalItem = items.Find(item => item.Id == id); 
-            var index = items.IndexOf(originalItem);
-            items.Insert(index, editedItem);
-            return await Task.FromResult((IHttpActionResult)Ok());
-        }
+        public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem) => await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
 
         [HttpDelete]
-        public async Task<IHttpActionResult> DeleteAsync(Guid id)
-        {
-            items.Remove(items.Find(item => item.Id == id));
-            return await Task.FromResult((IHttpActionResult)StatusCode(HttpStatusCode.NoContent));
-        }
-
+        public async Task<IHttpActionResult> DeleteAsync(Guid id) => await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
     }
 }
