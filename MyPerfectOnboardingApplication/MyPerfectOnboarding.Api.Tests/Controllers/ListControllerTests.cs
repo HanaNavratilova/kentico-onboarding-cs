@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
-using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Api.Tests.Utils;
+using MyPerfectOnboarding.Contracts;
+using MyPerfectOnboarding.Contracts.Models;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace MyPerfectOnboarding.Api.Tests.Controllers
@@ -19,7 +21,9 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [SetUp]
         public void Init()
         {
-            _listController = new ListController
+            var repository = Substitute.For<IListRepository>();
+
+            _listController = new ListController(repository)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()

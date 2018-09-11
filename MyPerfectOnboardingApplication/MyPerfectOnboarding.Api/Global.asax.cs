@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using MyPerfectOnboarding.Api.App_Start;
 
 namespace MyPerfectOnboarding.Api
 {
@@ -8,6 +9,7 @@ namespace MyPerfectOnboarding.Api
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configure(JsonSerializerConfig.Register);
+            GlobalConfiguration.Configure(ContainerConfig.Register);
         }
     }
 }

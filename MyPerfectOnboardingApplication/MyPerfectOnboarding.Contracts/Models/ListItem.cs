@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyPerfectOnboarding.Api.Models
+namespace MyPerfectOnboarding.Contracts.Models
 {
     public class ListItem
     {
