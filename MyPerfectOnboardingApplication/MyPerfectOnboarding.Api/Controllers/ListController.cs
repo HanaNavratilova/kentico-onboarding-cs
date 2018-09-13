@@ -19,27 +19,31 @@ namespace MyPerfectOnboarding.Api.Controllers
             _listRepository = listRepository;
         }
 
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAsync() => await Task.FromResult(Ok(_listRepository.GetAllItemsAsync()));
+        public async Task<IHttpActionResult> GetAsync()
+            => Ok(await _listRepository.GetAllItemsAsync());
 
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAsync(Guid id) => await Task.FromResult(Ok(_listRepository.GetItemAsync(id)));
+        public async Task<IHttpActionResult> GetAsync(Guid id)
+            => Ok(await _listRepository.GetItemAsync(id));
 
-        [HttpPost]
-        public async Task<IHttpActionResult> PostAsync(ListItem item) => await Task.FromResult(Created("api/v{version}/List", item));
+        public async Task<IHttpActionResult> PostAsync(ListItem item)
+        {
+            var newItem = await _listRepository.AddItemAsync(item);
+            const string location = "api/v{version}/List/id";
+            //return CreatedAtRoute("name", new { id = newItem.Id }, newItem);
+            return Created(location, newItem);
+            //return Created(Request.RequestUri.AbsoluteUri + newItem.Id, newItem);
+        }
 
-        [HttpPut]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
             await _listRepository.EditItemAsync(id, editedItem);
-            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [HttpDelete]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
             await _listRepository.DeleteItemAsync(id);
-            return await Task.FromResult(StatusCode(HttpStatusCode.NoContent));
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }

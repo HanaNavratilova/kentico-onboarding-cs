@@ -18,12 +18,19 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
     {
         private ListController _listController;
 
-        [SetUp]
+        private readonly ListItem[] _items = {
+            new ListItem{Id = Guid.NewGuid(), Text = "aaaaa", IsActive = false, CreationTime = new DateTime(1589, 12, 3), LastUpdateTime = new DateTime(1896, 4, 7)},
+            new ListItem{Id = Guid.NewGuid(), Text = "dfads", IsActive = false, CreationTime = new DateTime(4568, 6, 23), LastUpdateTime = new DateTime(8569, 8, 24)},
+        };
+
+        private IListRepository _repository;
+
+       [SetUp]
         public void Init()
         {
-            var repository = Substitute.For<IListRepository>();
+            _repository = Substitute.For<IListRepository>();
 
-            _listController = new ListController(repository)
+            _listController = new ListController(_repository)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -35,8 +42,8 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var message = await _listController.ExecuteAction(controller => controller.GetAsync());
 
-            List <ListItem> items;
-            message.TryGetContentValue(out items);
+           List<ListItem> items;
+           message.TryGetContentValue(out items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
@@ -44,7 +51,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_ReturnsItemWithGivenId()
         {
-            var id = new Guid();
+            var id = Guid.NewGuid();
 
             var message = await _listController.ExecuteAction(controller => controller.GetAsync(id));
 
@@ -64,7 +71,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Put_OkReturned()
         {
-            var id = new Guid();
+            var id = Guid.NewGuid();
 
             var item = new ListItem{ Id = id, Text = "newItem", IsActive = false, CreationTime = DateTime.Now, LastUpdateTime = DateTime.Now };
 
@@ -76,7 +83,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Delete_NoContentReturned()
         {
-            var id = new Guid();
+            var id = Guid.NewGuid();
 
             var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
 
