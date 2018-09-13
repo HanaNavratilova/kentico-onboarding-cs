@@ -42,8 +42,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var message = await _listController.ExecuteAction(controller => controller.GetAsync());
 
-           List<ListItem> items;
-           message.TryGetContentValue(out items);
+           message.TryGetContentValue(out List<ListItem> items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
