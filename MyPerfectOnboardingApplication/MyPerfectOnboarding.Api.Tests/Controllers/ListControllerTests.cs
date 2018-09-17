@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
 using MyPerfectOnboarding.Api.Tests.Utils;
-using MyPerfectOnboarding.Contracts;
+using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using NSubstitute;
 using NUnit.Framework;

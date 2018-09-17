@@ -65,18 +65,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseConfig.cs" />
+    <Compile Include="DatabaseBootstraper.cs" />
     <Compile Include="ListRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
-      <Project>{F9D88A7D-64F2-42F4-8E6D-EBF7222EFBFA}</Project>
-      <Name>MyPerfectOnboarding.Contracts</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
+      <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
+      <Name>MyPerfectOnboarding.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

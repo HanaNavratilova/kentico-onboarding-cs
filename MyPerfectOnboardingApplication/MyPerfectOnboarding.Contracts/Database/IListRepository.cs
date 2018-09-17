@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
 
-namespace MyPerfectOnboarding.Contracts
+namespace MyPerfectOnboarding.Contracts.Database
 {
     public interface IListRepository
     {

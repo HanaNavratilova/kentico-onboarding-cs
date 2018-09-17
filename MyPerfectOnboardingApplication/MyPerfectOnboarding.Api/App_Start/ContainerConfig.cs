@@ -1,16 +1,22 @@
-﻿using MyPerfectOnboarding.Database;
+﻿using System.Web.Http;
+using MyPerfectOnboarding.Contracts;
+using MyPerfectOnboarding.Database;
 using Unity;
 
 namespace MyPerfectOnboarding.Api
 {
     public static class ContainerConfig
     {
-        public static void Register(System.Web.Http.HttpConfiguration config)
+        public static void Register(HttpConfiguration config)
         {
-            var container = new UnityContainer();
+            var container = new UnityContainer()
+                .RegisterTypesFrom<DatabaseBootstraper>();
 
-            DatabaseConfig.Register(container);
             config.DependencyResolver = new DependencyResolver(container);
         }
+
+        internal static IUnityContainer RegisterTypesFrom<T>(this IUnityContainer container)
+            where T : IBootstraper, new()
+            => new T().RegisterTypesTo(container);
     }
 }

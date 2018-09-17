@@ -148,7 +148,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
       <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
