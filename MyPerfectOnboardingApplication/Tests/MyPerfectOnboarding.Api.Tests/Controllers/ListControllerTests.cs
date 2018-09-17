@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
 using MyPerfectOnboarding.Api.Tests.Utils;
+using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using NSubstitute;
@@ -24,13 +25,15 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         };
 
         private IListRepository _repository;
+        private IUrlLocation _location;
 
        [SetUp]
         public void Init()
         {
             _repository = Substitute.For<IListRepository>();
+            _location = Substitute.For<IUrlLocation>();
 
-            _listController = new ListController(_repository)
+            _listController = new ListController(_repository, _location)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()

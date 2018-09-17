@@ -3,43 +3,50 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
+using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 
 namespace MyPerfectOnboarding.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/List")]
+    [RoutePrefix("api/v{version:apiVersion}/List")]
+    [Route("")]
     public class ListController : ApiController
     {
-        private IListRepository _listRepository;
+        private readonly IListRepository _listRepository;
+        private readonly IUrlLocation _urlLocation;
 
-        public ListController(IListRepository listRepository)
+        public ListController(IListRepository listRepository, IUrlLocation urlLocation)
         {
             _listRepository = listRepository;
+            _urlLocation = urlLocation;
         }
+
 
         public async Task<IHttpActionResult> GetAsync()
             => Ok(await _listRepository.GetAllItemsAsync());
 
+        [Route("{id}", Name = "GetListItem")]
         public async Task<IHttpActionResult> GetAsync(Guid id)
             => Ok(await _listRepository.GetItemAsync(id));
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
             var newItem = await _listRepository.AddItemAsync(item);
-            const string location = "api/v{version}/List/id";
-            //return CreatedAtRoute("name", new { id = newItem.Id }, newItem);
+            var location = "aaaa";
+
             return Created(location, newItem);
-            //return Created(Request.RequestUri.AbsoluteUri + newItem.Id, newItem);
         }
 
+        [Route("{id}")]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
             await _listRepository.EditItemAsync(id, editedItem);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [Route("{id}")]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
             await _listRepository.DeleteItemAsync(id);

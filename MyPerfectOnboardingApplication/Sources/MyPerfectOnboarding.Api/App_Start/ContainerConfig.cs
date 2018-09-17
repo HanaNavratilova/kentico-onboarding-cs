@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using MyPerfectOnboarding.Api.Services;
 using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Database;
 using Unity;
@@ -10,7 +11,8 @@ namespace MyPerfectOnboarding.Api
         public static void Register(HttpConfiguration config)
         {
             var container = new UnityContainer()
-                .RegisterTypesFrom<DatabaseBootstraper>();
+                .RegisterTypesFrom<DatabaseBootstraper>()
+                .RegisterTypesFrom<LocationConfig>(); ;
 
             config.DependencyResolver = new DependencyResolver(container);
         }
