@@ -3,9 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
-using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
+using MyPerfectOnboarding.Contracts.Services.Location;
 
 namespace MyPerfectOnboarding.Api.Controllers
 {
@@ -15,9 +15,9 @@ namespace MyPerfectOnboarding.Api.Controllers
     public class ListController : ApiController
     {
         private readonly IListRepository _listRepository;
-        private readonly IUrlLocation _urlLocation;
+        private readonly IUrlLocator _urlLocation;
 
-        public ListController(IListRepository listRepository, IUrlLocation urlLocation)
+        public ListController(IListRepository listRepository, IUrlLocator urlLocation)
         {
             _listRepository = listRepository;
             _urlLocation = urlLocation;
@@ -28,13 +28,13 @@ namespace MyPerfectOnboarding.Api.Controllers
             => Ok(await _listRepository.GetAllItemsAsync());
 
         [Route("{id}", Name = "GetListItem")]
-        public async Task<IHttpActionResult> GetAsync(Guid id)
+        public async Task<IHttpActionResult> GetAsync(Guid id) 
             => Ok(await _listRepository.GetItemAsync(id));
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
             var newItem = await _listRepository.AddItemAsync(item);
-            var location = "aaaa";
+            var location = _urlLocation.GetListItemLocation(newItem.Id);
 
             return Created(location, newItem);
         }

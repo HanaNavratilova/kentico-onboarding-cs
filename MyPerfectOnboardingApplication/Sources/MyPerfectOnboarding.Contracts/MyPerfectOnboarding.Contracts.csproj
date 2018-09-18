@@ -69,11 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\IUrlLocatorConfig.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="IBootstraper.cs" />
-    <Compile Include="IUrlLocation.cs" />
     <Compile Include="Models\ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Location\IUrlLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

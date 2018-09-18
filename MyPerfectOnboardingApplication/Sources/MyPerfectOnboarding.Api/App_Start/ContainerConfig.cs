@@ -12,7 +12,7 @@ namespace MyPerfectOnboarding.Api
         {
             var container = new UnityContainer()
                 .RegisterTypesFrom<DatabaseBootstraper>()
-                .RegisterTypesFrom<LocationConfig>(); ;
+                .RegisterTypesFrom<ServicesBootstraper>();
 
             config.DependencyResolver = new DependencyResolver(container);
         }

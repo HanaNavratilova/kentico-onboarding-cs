@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
 using MyPerfectOnboarding.Api.Tests.Utils;
-using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
+using MyPerfectOnboarding.Contracts.Services.Location;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -25,13 +25,13 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         };
 
         private IListRepository _repository;
-        private IUrlLocation _location;
+        private IUrlLocator _location;
 
        [SetUp]
         public void Init()
         {
             _repository = Substitute.For<IListRepository>();
-            _location = Substitute.For<IUrlLocation>();
+            _location = Substitute.For<IUrlLocator>();
 
             _listController = new ListController(_repository, _location)
             {
@@ -69,15 +69,27 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Post_CreatedReturned()
         {
-            var newItem = new ListItem{Id = Guid.NewGuid(), Text = "newItem", IsActive = false, CreationTime = DateTime.Now, LastUpdateTime = DateTime.Now};
+            var item = new ListItem {Text = "newItem"};
+            var newItem = new ListItem
+            {
+                Id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAB"),
+                Text = "newItem",
+                IsActive = false,
+                CreationTime = new DateTime(1589, 12, 3),
+                LastUpdateTime = new DateTime(1896, 4, 7)
+            };
+            var expectedUri = new Uri($"http://www.aaa.com/{newItem.Id}");
+            _repository.AddItemAsync(item).Returns(newItem);
+            _location.GetListItemLocation(newItem.Id).Returns(expectedUri);
 
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
+            var message = await _listController.ExecuteAction(controller => controller.PostAsync(item));
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            Assert.That(message.Headers.Location, Is.EqualTo(expectedUri));
         }
 
         [Test]
-        public async Task Put_OkReturned()
+        public async Task Put_NoContentReturned()
         {
             var id = Guid.NewGuid();
             var item = new ListItem{Text = "newItem"};
