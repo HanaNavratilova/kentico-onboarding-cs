@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MyPerfectOnboarding.Contracts.Models
 {
@@ -13,5 +14,10 @@ namespace MyPerfectOnboarding.Contracts.Models
         public DateTime CreationTime { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Id)}: {Id}, {nameof(Text)}: {Text}, {nameof(IsActive)}: {IsActive}, {nameof(CreationTime)}: {CreationTime}, {nameof(LastUpdateTime)}: {LastUpdateTime}";
+        }
     }
 }

@@ -47,10 +47,10 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             var message = await _listController.ExecuteAction(controller => controller.GetAsync());
 
-           message.TryGetContentValue(out IEnumerable<ListItem> items);
+            message.TryGetContentValue(out IEnumerable<ListItem> items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(items, Is.EqualTo(_items));
+            Assert.That(items, Is.EqualTo(_items).Using(new ListItemEqualityComparer()));
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             message.TryGetContentValue(out ListItem item);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(item, Is.EqualTo(expectedItem));
+            Assert.That(item, Is.EqualTo(expectedItem).Using(new ListItemEqualityComparer()));
         }
 
         [Test]
