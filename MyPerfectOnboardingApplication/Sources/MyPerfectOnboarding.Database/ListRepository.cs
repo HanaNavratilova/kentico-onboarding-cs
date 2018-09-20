@@ -1,7 +1,7 @@
-﻿using MyPerfectOnboarding.Contracts.Database;
-using MyPerfectOnboarding.Contracts.Models;
+﻿using MyPerfectOnboarding.Contracts.Models;
 using System;
 using System.Threading.Tasks;
+using MyPerfectOnboarding.Contracts.Database;
 
 namespace MyPerfectOnboarding.Database
 {

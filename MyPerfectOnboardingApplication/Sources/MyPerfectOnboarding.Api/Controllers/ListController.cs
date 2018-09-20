@@ -23,7 +23,6 @@ namespace MyPerfectOnboarding.Api.Controllers
             _urlLocation = urlLocation;
         }
 
-
         public async Task<IHttpActionResult> GetAsync()
             => Ok(await _listRepository.GetAllItemsAsync());
 
@@ -43,6 +42,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
             await _listRepository.EditItemAsync(id, editedItem);
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -50,6 +50,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
             await _listRepository.DeleteItemAsync(id);
+
             return StatusCode(HttpStatusCode.NoContent);
         }
     }

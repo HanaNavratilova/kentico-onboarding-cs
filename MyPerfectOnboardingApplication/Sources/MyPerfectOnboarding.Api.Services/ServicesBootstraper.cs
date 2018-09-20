@@ -1,13 +1,12 @@
 ﻿using System.Net.Http;
 using System.Web;
-using MyPerfectOnboarding.Api.Services.Location;
 using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
 
-namespace MyPerfectOnboarding.Api.Services
+namespace MyPerfectOnboarding.Api.Services.Location
 {
     public class ServicesBootstraper : IBootstraper
     {

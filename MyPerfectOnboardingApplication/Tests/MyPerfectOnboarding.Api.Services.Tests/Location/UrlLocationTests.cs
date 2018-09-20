@@ -6,7 +6,7 @@ using MyPerfectOnboarding.Contracts.Api;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace MyPerfectOnboarding.Api.Services.Tests
+namespace MyPerfectOnboarding.Api.Services.Tests.Location
 {
     [TestFixture]
     public class UrlLocationTests

@@ -1,5 +1,5 @@
 ﻿using System.Web.Http;
-using MyPerfectOnboarding.Api.Services;
+using MyPerfectOnboarding.Api.Services.Location;
 using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Database;
 using Unity;
