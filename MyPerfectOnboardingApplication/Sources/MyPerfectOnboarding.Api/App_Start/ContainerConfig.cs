@@ -1,8 +1,10 @@
 ﻿using System.Web.Http;
 using MyPerfectOnboarding.Api.Services.Location;
 using MyPerfectOnboarding.Contracts;
+using MyPerfectOnboarding.Contracts.Api;
 using MyPerfectOnboarding.Database;
 using Unity;
+using Unity.Lifetime;
 
 namespace MyPerfectOnboarding.Api
 {
@@ -10,11 +12,18 @@ namespace MyPerfectOnboarding.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var container = new UnityContainer()
-                .RegisterTypesFrom<DatabaseBootstraper>()
-                .RegisterTypesFrom<ServicesBootstraper>();
+            var container = new UnityContainer();
+            RegisterTypes(container);
 
             config.DependencyResolver = new DependencyResolver(container);
+        }
+
+        internal static void RegisterTypes(IUnityContainer container)
+        {
+            container
+                .RegisterTypesFrom<DatabaseBootstraper>()
+                .RegisterTypesFrom<ServicesBootstraper>()
+                .RegisterType<IUrlLocatorConfig, UrlLocatorConfig>(new HierarchicalLifetimeManager());
         }
 
         internal static IUnityContainer RegisterTypesFrom<T>(this IUnityContainer container)
