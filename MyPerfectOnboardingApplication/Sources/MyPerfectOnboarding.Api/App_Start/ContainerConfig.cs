@@ -1,7 +1,8 @@
 ﻿using System.Web.Http;
+using MyPerfectOnboarding.Api.Configuration;
 using MyPerfectOnboarding.Api.Services.Location;
 using MyPerfectOnboarding.Contracts;
-using MyPerfectOnboarding.Contracts.Api;
+using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Database;
 using Unity;
 using Unity.Lifetime;
@@ -19,15 +20,13 @@ namespace MyPerfectOnboarding.Api
         }
 
         internal static void RegisterTypes(IUnityContainer container)
-        {
-            container
+            => container
                 .RegisterTypesFrom<DatabaseBootstraper>()
                 .RegisterTypesFrom<ServicesBootstraper>()
-                .RegisterType<IUrlLocatorConfig, UrlLocatorConfig>(new HierarchicalLifetimeManager());
-        }
+                .RegisterType<IControllersRouteNames, ControllersRouteNames>(new HierarchicalLifetimeManager());
 
-        internal static IUnityContainer RegisterTypesFrom<T>(this IUnityContainer container)
-            where T : IBootstraper, new()
-            => new T().RegisterTypesTo(container);
+        internal static IUnityContainer RegisterTypesFrom<TBootstraper>(this IUnityContainer container)
+            where TBootstraper : IBootstraper, new()
+            => new TBootstraper().RegisterTypesTo(container);
     }
 }

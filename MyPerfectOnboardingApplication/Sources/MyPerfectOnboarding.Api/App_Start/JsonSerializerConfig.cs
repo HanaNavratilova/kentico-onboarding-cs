@@ -7,9 +7,11 @@ namespace MyPerfectOnboarding.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+            var jsonFormatter = config.Formatters.JsonFormatter;
+
+            jsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
-            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+            jsonFormatter.UseDataContractJsonSerializer = false;
         }
     }
 }

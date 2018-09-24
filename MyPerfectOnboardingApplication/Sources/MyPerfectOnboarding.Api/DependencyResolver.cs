@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Exceptions;
@@ -8,29 +9,29 @@ namespace MyPerfectOnboarding.Api
 {
     public class DependencyResolver : IDependencyResolver
     {
-        protected IUnityContainer _container;
+        protected IUnityContainer Container;
 
         public DependencyResolver(IUnityContainer container)
         {
-            _container = container;
+            Container = container;
         }
 
         public IDependencyScope BeginScope()
         {
-            var child = _container.CreateChildContainer();
+            var child = Container.CreateChildContainer();
             return new DependencyResolver(child);
         }
 
         public void Dispose()
         {
-            _container.Dispose();
+            Container.Dispose();
         }
 
         public object GetService(Type serviceType)
         {
             try
             {
-                return _container.Resolve(serviceType);
+                return Container.Resolve(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -42,11 +43,11 @@ namespace MyPerfectOnboarding.Api
         {
             try
             {
-                return _container.ResolveAll(serviceType);
+                return Container.ResolveAll(serviceType);
             }
             catch (ResolutionFailedException)
             {
-                return new List<object>();
+                return Enumerable.Empty<object>();
             }
         }
     }

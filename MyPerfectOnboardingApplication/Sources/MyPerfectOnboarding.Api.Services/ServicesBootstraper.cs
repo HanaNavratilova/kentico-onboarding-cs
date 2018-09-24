@@ -13,6 +13,6 @@ namespace MyPerfectOnboarding.Api.Services.Location
         public IUnityContainer RegisterTypesTo(IUnityContainer container)
             => container
                 .RegisterType<IUrlLocator, UrlLocator>(new HierarchicalLifetimeManager())
-                .RegisterType<HttpRequestMessage>(new InjectionFactory(unityContainer => HttpContext.Current.Items["MS_HttpRequestMessage"]));
+                .RegisterType<HttpRequestMessage>(new HierarchicalLifetimeManager(), new InjectionFactory(unityContainer => HttpContext.Current.Items["MS_HttpRequestMessage"]));
     }
 }

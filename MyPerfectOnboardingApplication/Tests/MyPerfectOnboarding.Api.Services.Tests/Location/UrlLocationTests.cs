@@ -2,7 +2,7 @@
 using System.Web.Http.Routing;
 using System.Web.Routing;
 using MyPerfectOnboarding.Api.Services.Location;
-using MyPerfectOnboarding.Contracts.Api;
+using MyPerfectOnboarding.Contracts.Services.Location;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -16,20 +16,36 @@ namespace MyPerfectOnboarding.Api.Services.Tests.Location
         {
             var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
             var expectedUri = new Uri($"http://www.aaa.com/try/to/create/uri/with/id/{id}/and/it/is/awesome");
-            const string name = "aaaaa";
-            var urlHelper = Substitute.For<UrlHelper>();
-            urlHelper.Link(name, Arg.Is<object>(obj => IsGivenIdInObject(obj, id))).Returns(expectedUri.ToString());
-            var urlLocatorConfig = Substitute.For<IUrlLocatorConfig>();
-            urlLocatorConfig.ListItemRouteName.Returns(name);
-            var urlLocation = new UrlLocator(urlHelper, urlLocatorConfig);
+            var urlLocator = GetUrlLocator(id, expectedUri);
 
-            var uri = urlLocation.GetListItemLocation(id);
+            var uri = urlLocator.GetListItemLocation(id);
 
             Assert.That(uri, Is.EqualTo(expectedUri));
         }
 
-        private static bool IsGivenIdInObject(object obj, Guid expectedId)
+        private static UrlLocator GetUrlLocator(Guid id, Uri expectedUri)
         {
+            const string routeName = "aaaaa";
+
+            var urlHelper = Substitute.For<UrlHelper>();
+            urlHelper
+                .Link(
+                    routeName,
+                    Arg.Is<object>(routeValues => IsGivenIdInRouteValues(routeValues, id)))
+                        .Returns(expectedUri.ToString()
+                );
+
+            var urlLocatorConfig = Substitute.For<IControllersRouteNames>();
+            urlLocatorConfig
+                .ListItemRouteName
+                .Returns(routeName);
+
+            return new UrlLocator(urlHelper, urlLocatorConfig);
+        }
+
+        private static bool IsGivenIdInRouteValues(object obj, Guid expectedId)
+        {
+            // ReSharper disable once CollectionNeverUpdated.Local
             var dictionary = new RouteValueDictionary(obj);
             var id = (Guid)dictionary["id"];
 

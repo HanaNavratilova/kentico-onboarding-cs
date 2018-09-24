@@ -8,11 +8,11 @@ namespace MyPerfectOnboarding.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var constraintResolver = new DefaultInlineConstraintResolver()
+            var constraintResolver = new DefaultInlineConstraintResolver
             {
                 ConstraintMap =
                 {
-                    ["apiVersion"] = typeof( ApiVersionRouteConstraint )
+                    ["apiVersion"] = typeof(ApiVersionRouteConstraint)
                 }
             };
             config.MapHttpAttributeRoutes(constraintResolver);

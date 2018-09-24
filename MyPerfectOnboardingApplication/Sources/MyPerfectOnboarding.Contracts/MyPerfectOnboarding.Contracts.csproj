@@ -69,7 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\IUrlLocatorConfig.cs" />
+    <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="IBootstraper.cs" />
     <Compile Include="Models\ListItem.cs" />

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using MyPerfectOnboarding.Contracts;
 using NUnit.Framework;
 using Unity;
@@ -10,42 +9,49 @@ using Unity;
 namespace MyPerfectOnboarding.Api.Tests
 {
     [TestFixture]
-    class ContainerConfigTests
+    internal class ContainerConfigTests
     {
-        private static readonly HashSet<Type> InterfacesNotToRegister = new HashSet<Type>
+        private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {
             typeof(IBootstraper)
         };
 
-        private static readonly HashSet<Type> InterfacesToRegister = new HashSet<Type>
+        private static readonly IEnumerable<Type> TypesToRegisterExplicitly = new[]
         {
             typeof(HttpRequestMessage),
             typeof(IUnityContainer)
-
         };
 
         [Test]
         public void RegisterTypes_UnityContainer_RegisterAllBootstrapers()
         {
             var container = new UnityContainer();
-            var interfacesInContracts = 
+            var expectedTypes = GetExpectedTypes();
+
+            ContainerConfig.RegisterTypes(container);
+            var types = container.Registrations.Select(r => r.RegisteredType).ToArray();
+
+            var missingTypes = types.Except(expectedTypes).ToHashSet();
+            var unwantedTypes = expectedTypes.Except(types).ToHashSet();
+
+            Assert.That(unwantedTypes, Is.Empty, "Following types were registered but they should not be:");
+            Assert.That(missingTypes, Is.Empty, "Following types should be registered:");
+        }
+
+        private static HashSet<Type> GetExpectedTypes()
+        {
+            var interfacesInContracts =
                 typeof(IBootstraper)
                     .Assembly
                     .GetTypes()
                     .Where(x => x.IsInterface)
-                    .ToHashSet();
+                    .ToArray();
 
-            var expectedInterfaces = Enumerable.Empty<Type>()
-                .Union(InterfacesToRegister)
+            return Enumerable.Empty<Type>()
+                .Union(TypesToRegisterExplicitly)
                 .Union(interfacesInContracts)
-                .Except(InterfacesNotToRegister)
+                .Except(TypesNotToRegister)
                 .ToHashSet();
-
-            
-            ContainerConfig.RegisterTypes(container);
-            var interfaces = container.Registrations.Select(r => r.RegisteredType).ToHashSet();
-
-            Assert.That(interfaces, Is.EquivalentTo(expectedInterfaces));
         }
     }
 }

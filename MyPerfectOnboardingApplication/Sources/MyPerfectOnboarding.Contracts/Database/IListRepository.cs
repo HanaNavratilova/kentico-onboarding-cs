@@ -8,9 +8,9 @@ namespace MyPerfectOnboarding.Contracts.Database
     {
         Task<ListItem> AddItemAsync(ListItem item);
 
-        Task DeleteItemAsync(Guid id);
+        Task<ListItem> DeleteItemAsync(Guid id);
 
-        Task EditItemAsync(Guid id, ListItem editedItem);
+        Task ReplaceItemAsync(ListItem editedItem);
 
         Task<ListItem[]> GetAllItemsAsync();
 

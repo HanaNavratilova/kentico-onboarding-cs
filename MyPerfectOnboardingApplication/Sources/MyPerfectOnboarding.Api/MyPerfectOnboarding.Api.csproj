@@ -136,7 +136,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UrlLocatorConfig.cs" />
+    <Compile Include="Configuration\ControllersRouteNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

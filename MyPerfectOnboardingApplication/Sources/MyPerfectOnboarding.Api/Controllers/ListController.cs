@@ -41,7 +41,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
-            await _listRepository.EditItemAsync(id, editedItem);
+            await _listRepository.ReplaceItemAsync(editedItem);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

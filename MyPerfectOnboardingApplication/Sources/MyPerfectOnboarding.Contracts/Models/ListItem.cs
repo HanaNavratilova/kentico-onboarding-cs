@@ -14,9 +14,7 @@ namespace MyPerfectOnboarding.Contracts.Models
 
         public DateTime LastUpdateTime { get; set; }
 
-        public override string ToString()
-        {
-            return $"{nameof(Id)}: {Id}, {nameof(Text)}: {Text}, {nameof(IsActive)}: {IsActive}, {nameof(CreationTime)}: {CreationTime}, {nameof(LastUpdateTime)}: {LastUpdateTime}";
-        }
+        public override string ToString() 
+            => $"{nameof(Id)}: {Id}, {nameof(Text)}: {Text}, {nameof(IsActive)}: {IsActive}, {nameof(CreationTime)}: {CreationTime}, {nameof(LastUpdateTime)}: {LastUpdateTime}";
     }
 }

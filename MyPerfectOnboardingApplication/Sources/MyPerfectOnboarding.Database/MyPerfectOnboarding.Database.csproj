@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseBootstraper.cs" />
-    <Compile Include="ListRepository.cs" />
+    <Compile Include="Repository\ListRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

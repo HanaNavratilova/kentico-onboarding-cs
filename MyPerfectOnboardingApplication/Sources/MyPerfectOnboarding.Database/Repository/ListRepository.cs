@@ -1,9 +1,9 @@
-﻿using MyPerfectOnboarding.Contracts.Models;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Database;
+using MyPerfectOnboarding.Contracts.Models;
 
-namespace MyPerfectOnboarding.Database
+namespace MyPerfectOnboarding.Database.Repository
 {
     internal class ListRepository : IListRepository
     {
@@ -28,9 +28,9 @@ namespace MyPerfectOnboarding.Database
 
         public async Task<ListItem> AddItemAsync(ListItem item) => await Task.FromResult(_items[1]);
 
-        public async Task DeleteItemAsync(Guid id) => await Task.CompletedTask;
+        public async Task<ListItem> DeleteItemAsync(Guid id) => await Task.FromResult(_items[0]);
 
-        public async Task EditItemAsync(Guid id, ListItem editedItem) => await Task.CompletedTask;
+        public async Task ReplaceItemAsync(ListItem editedItem) => await Task.CompletedTask;
 
         public async Task<ListItem[]> GetAllItemsAsync() => await Task.FromResult(_items);
 
