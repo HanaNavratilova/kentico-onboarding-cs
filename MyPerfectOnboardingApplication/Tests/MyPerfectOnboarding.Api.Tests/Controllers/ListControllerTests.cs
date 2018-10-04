@@ -5,10 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
-using MyPerfectOnboarding.Api.Tests.Utils;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Location;
+using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -18,7 +18,6 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
     internal class ListControllerTests
     {
         private ListController _listController;
-        private readonly ListItemEqualityComparer _listItemEqualityComparer = new ListItemEqualityComparer();
 
         private readonly ListItem[] _items =
         {
@@ -61,11 +60,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             _repository.GetAllItemsAsync().Returns(Task.FromResult(_items));
 
-            var message = await _listController.ExecuteAction(controller => controller.GetAsync());
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync());
             message.TryGetContentValue(out IEnumerable<ListItem> items);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(items, Is.EqualTo(_items).Using(_listItemEqualityComparer));
+            Assert.That(items, Is.EqualTo(_items).UsingComparer());
         }
 
         [Test]
@@ -74,11 +73,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             var expectedItem = _items[0];
             _repository.GetItemAsync(expectedItem.Id).Returns(Task.FromResult(expectedItem));
 
-            var message = await _listController.ExecuteAction(controller => controller.GetAsync(expectedItem.Id));
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync(expectedItem.Id));
             message.TryGetContentValue(out ListItem item);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(item, Is.EqualTo(expectedItem).Using(_listItemEqualityComparer));
+            Assert.That(item, Is.EqualTo(expectedItem).UsingComparer());
         }
 
         [Test]
@@ -97,14 +96,14 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             _repository.AddItemAsync(newItem).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).PostAsync(newItem));
             message.TryGetContentValue(out ListItem item);
 
             Assert.Multiple(() =>
             {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
                 Assert.That(message.Headers.Location, Is.EqualTo(expectedUri));
-                Assert.That(item, Is.EqualTo(createdItem).Using(_listItemEqualityComparer));
+                Assert.That(item, Is.EqualTo(createdItem).UsingComparer());
             });
         }
 
@@ -114,7 +113,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
             var item = new ListItem { Text = "newItem" };
 
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
 
             await _repository.Received().ReplaceItemAsync(item);
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
@@ -125,7 +124,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
 
-            var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).DeleteAsync(id));
 
             await _repository.Received().DeleteItemAsync(id);
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));

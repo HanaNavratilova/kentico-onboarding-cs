@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Api.Services.Tests.Location
 {
     [TestFixture]
-    public class UrlLocationTests
+    internal class UrlLocationTests
     {
         [Test]
         public void GetListItemLocation_ItemId_ReturnsCorrectlyCreatedLocation()
@@ -32,8 +32,7 @@ namespace MyPerfectOnboarding.Api.Services.Tests.Location
                 .Link(
                     routeName,
                     Arg.Is<object>(routeValues => IsGivenIdInRouteValues(routeValues, id)))
-                        .Returns(expectedUri.ToString()
-                );
+                .Returns(expectedUri.ToString());
 
             var urlLocatorConfig = Substitute.For<IControllersRouteNames>();
             urlLocatorConfig

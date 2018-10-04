@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A5CD7A91
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPerfectOnboarding.Api.Services.Tests", "Tests\MyPerfectOnboarding.Api.Services.Tests\MyPerfectOnboarding.Api.Services.Tests.csproj", "{D25258E0-6D73-459B-AE84-712C2CE46301}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPerfectOnboarding.Tests.Utils", "Tests\MyPerfectOnboarding.Tests.Utils\MyPerfectOnboarding.Tests.Utils.csproj", "{21423E92-F202-401E-B7AC-3C6FF2BC4412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{D25258E0-6D73-459B-AE84-712C2CE46301}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D25258E0-6D73-459B-AE84-712C2CE46301}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D25258E0-6D73-459B-AE84-712C2CE46301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21423E92-F202-401E-B7AC-3C6FF2BC4412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21423E92-F202-401E-B7AC-3C6FF2BC4412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21423E92-F202-401E-B7AC-3C6FF2BC4412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21423E92-F202-401E-B7AC-3C6FF2BC4412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{D4B5E6EA-C912-4B88-8FA1-E3412076230C} = {A5CD7A91-F669-4E83-82FE-B18894AB4AC0}
 		{167004E9-AD5B-4FA0-B2A5-E9E8CAA865A2} = {B8D5BCE2-824B-4334-8235-60D7495072AB}
 		{D25258E0-6D73-459B-AE84-712C2CE46301} = {A5CD7A91-F669-4E83-82FE-B18894AB4AC0}
+		{21423E92-F202-401E-B7AC-3C6FF2BC4412} = {A5CD7A91-F669-4E83-82FE-B18894AB4AC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80229740-0404-4FEB-82EB-1C7D145CD231}
