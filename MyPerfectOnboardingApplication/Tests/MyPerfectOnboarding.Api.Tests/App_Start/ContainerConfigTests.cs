@@ -29,10 +29,10 @@ namespace MyPerfectOnboarding.Api.Tests
             var expectedTypes = GetExpectedTypes();
 
             ContainerConfig.RegisterTypes(container);
-            var types = container.Registrations.Select(r => r.RegisteredType).ToArray();
+            var registeredTypes = container.Registrations.Select(r => r.RegisteredType).ToArray();
 
-            var missingTypes = types.Except(expectedTypes).ToHashSet();
-            var unwantedTypes = expectedTypes.Except(types).ToHashSet();
+            var missingTypes = registeredTypes.Except(expectedTypes).ToHashSet();
+            var unwantedTypes = expectedTypes.Except(registeredTypes).ToHashSet();
 
             Assert.That(unwantedTypes, Is.Empty, "Following types were registered but they should not be:");
             Assert.That(missingTypes, Is.Empty, "Following types should be registered:");

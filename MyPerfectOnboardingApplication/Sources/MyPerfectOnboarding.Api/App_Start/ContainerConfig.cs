@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using MyPerfectOnboarding.Api.Configuration;
-using MyPerfectOnboarding.Api.Services.Location;
+using MyPerfectOnboarding.Api.Services;
 using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Database;

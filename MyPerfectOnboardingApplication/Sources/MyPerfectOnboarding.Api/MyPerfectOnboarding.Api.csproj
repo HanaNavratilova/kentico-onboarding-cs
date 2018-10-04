@@ -129,7 +129,7 @@
   <ItemGroup>
     <Compile Include="App_Start\ContainerConfig.cs" />
     <Compile Include="App_Start\JsonSerializerConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App_Start\RoutesConfig.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="DependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
