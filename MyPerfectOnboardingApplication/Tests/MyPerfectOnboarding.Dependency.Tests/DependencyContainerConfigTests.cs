@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using MyPerfectOnboarding.Contracts;
+using MyPerfectOnboarding.Api.Configuration;
+using MyPerfectOnboarding.Contracts.Dependency;
 using NUnit.Framework;
 using Unity;
 
-namespace MyPerfectOnboarding.Api.Tests
+namespace MyPerfectOnboarding.Dependency.Tests
 {
     [TestFixture]
-    internal class ContainerConfigTests
+    class DependencyContainerConfigTests
     {
         private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {
-            typeof(IBootstraper)
+            typeof(IBootstraper),
+            typeof(IContainer)
         };
 
         private static readonly IEnumerable<Type> TypesToRegisterExplicitly = new[]
@@ -25,12 +27,16 @@ namespace MyPerfectOnboarding.Api.Tests
         [Test]
         public void RegisterTypes_UnityContainer_RegisterAllBootstrapers()
         {
-            var container = new UnityContainer();
             var expectedTypes = GetExpectedTypes();
+            var routeNames = new ControllersRouteNames();
 
-            ContainerConfig.RegisterTypes(container);
-            var registeredTypes = container.Registrations.Select(r => r.RegisteredType).ToArray();
+            IUnityContainer unityContainer = new UnityContainer();
+            IContainer container = new Container(unityContainer);
+            var dependencyContainer = new DependencyContainerConfig(routeNames);
 
+            dependencyContainer.RegisterTypes(container);
+
+            var registeredTypes = unityContainer.Registrations.Select(r => r.RegisteredType).ToArray();
             var missingTypes = registeredTypes.Except(expectedTypes).ToHashSet();
             var unwantedTypes = expectedTypes.Except(registeredTypes).ToHashSet();
 
