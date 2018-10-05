@@ -2,36 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
+using MyPerfectOnboarding.Contracts.Dependency;
 using Unity;
 using Unity.Exceptions;
 
-namespace MyPerfectOnboarding.Api
+namespace MyPerfectOnboarding.Dependency
 {
-    public class DependencyResolver : IDependencyResolver
+    internal class DependencyResolver : IDependencyResolver
     {
-        protected IUnityContainer Container;
+        private readonly IContainer _container;
 
-        public DependencyResolver(IUnityContainer container)
+        public DependencyResolver(IContainer container)
         {
-            Container = container;
+            _container = container;
         }
 
         public IDependencyScope BeginScope()
         {
-            var child = Container.CreateChildContainer();
+            var child = _container.CreateChildContainer();
             return new DependencyResolver(child);
         }
 
         public void Dispose()
         {
-            Container.Dispose();
+            _container.Dispose();
         }
 
         public object GetService(Type serviceType)
         {
             try
             {
-                return Container.Resolve(serviceType);
+                return _container.Resolve(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -43,7 +44,7 @@ namespace MyPerfectOnboarding.Api
         {
             try
             {
-                return Container.ResolveAll(serviceType);
+                return _container.ResolveAll(serviceType);
             }
             catch (ResolutionFailedException)
             {

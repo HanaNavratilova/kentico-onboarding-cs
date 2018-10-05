@@ -1,9 +1,9 @@
-﻿using Unity;
+﻿using MyPerfectOnboarding.Contracts.Dependency;
 
 namespace MyPerfectOnboarding.Contracts
 {
     public interface IBootstraper
     {
-        IUnityContainer RegisterTypesTo(IUnityContainer container);
+        IContainer RegisterTypesTo(IContainer container);
     }
 }
