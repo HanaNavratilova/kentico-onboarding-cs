@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MyPerfectOnboarding.Contracts.Models;
 
-namespace MyPerfectOnboarding.Api.Tests.Utils
+namespace MyPerfectOnboarding.Tests.Utils.Comparers
 {
     public sealed class ListItemEqualityComparer : IEqualityComparer<ListItem>
     {
+        private static readonly Lazy<ListItemEqualityComparer> LazyComparer = new Lazy<ListItemEqualityComparer>(() => new ListItemEqualityComparer());
+
+        public static IEqualityComparer<ListItem> Instance => LazyComparer.Value;
+
+        private ListItemEqualityComparer() { }
+
         public bool Equals(ListItem x, ListItem y)
         {
             if (ReferenceEquals(x, y)) return true;

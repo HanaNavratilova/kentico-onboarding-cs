@@ -6,6 +6,7 @@ using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Database;
 using MyPerfectOnboarding.Dependency.Containers;
 using MyPerfectOnboarding.Dependency.DependencyResolvers;
+using MyPerfectOnboarding.Services;
 using Unity;
 
 namespace MyPerfectOnboarding.Dependency
@@ -26,6 +27,7 @@ namespace MyPerfectOnboarding.Dependency
         internal void RegisterTypes(IContainer container)
             => container
                 .RegisterBootstraper<DatabaseBootstraper>()
+                .RegisterBootstraper<ApiServicesBootstraper>()
                 .RegisterBootstraper<ServicesBootstraper>()
                 .RegisterInstance(_connectionDetails)
                 .RegisterInstance(_routeNames);

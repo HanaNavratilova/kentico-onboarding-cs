@@ -104,11 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\ApiControllerExtension.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\EqualConstraintExtension.cs" />
-    <Compile Include="Utils\ListItemEqualityComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -128,6 +125,10 @@
     <ProjectReference Include="..\..\Sources\MyPerfectOnboarding.Dependency\MyPerfectOnboarding.Dependency.csproj">
       <Project>{83eac366-b50f-438e-9034-e9faef7279c0}</Project>
       <Name>MyPerfectOnboarding.Dependency</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyPerfectOnboarding.Tests.Utils\MyPerfectOnboarding.Tests.Utils.csproj">
+      <Project>{21423e92-f202-401e-b7ac-3c6ff2bc4412}</Project>
+      <Name>MyPerfectOnboarding.Tests.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

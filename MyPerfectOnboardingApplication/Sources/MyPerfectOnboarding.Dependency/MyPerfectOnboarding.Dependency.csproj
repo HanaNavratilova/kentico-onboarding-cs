@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyPerfectOnboarding.Api.Services\MyPerfectOnboarding.Api.Services.csproj">
-      <Project>{167004E9-AD5B-4FA0-B2A5-E9E8CAA865A2}</Project>
+      <Project>{167004e9-ad5b-4fa0-b2a5-e9e8caa865a2}</Project>
       <Name>MyPerfectOnboarding.Api.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
@@ -101,6 +101,10 @@
     <ProjectReference Include="..\MyPerfectOnboarding.Database\MyPerfectOnboarding.Database.csproj">
       <Project>{B8BE968D-19EC-49BB-8E3B-0D5A6AB231B6}</Project>
       <Name>MyPerfectOnboarding.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyPerfectOnboarding.Services\MyPerfectOnboarding.Services.csproj">
+      <Project>{A71D8173-234F-48D3-8161-6228269B255B}</Project>
+      <Name>MyPerfectOnboarding.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

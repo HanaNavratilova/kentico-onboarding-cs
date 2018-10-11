@@ -22,45 +22,20 @@ namespace MyPerfectOnboarding.Database.Repository
 
         public async Task<ListItem> AddItemAsync(ListItem item)
         {
-            MakeItemCompleted(item);
             await _collection.InsertOneAsync(item);
             return item;
         }
 
         public async Task<ListItem> DeleteItemAsync(Guid id)
-        {
-            var deletedItem = await _collection.FindOneAndDeleteAsync(item => item.Id == id);
-            return deletedItem;
-        }
+            => await _collection.FindOneAndDeleteAsync(item => item.Id == id);
 
         public async Task ReplaceItemAsync(ListItem editedItem)
-        {
-            var update = Builders<ListItem>.Update
-                .Set("Text", editedItem.Text)
-                .Set("IsActive", editedItem.IsActive)
-                .Set("LastUpdateTime", DateTime.UtcNow);
-            await _collection.FindOneAndUpdateAsync(item => item.Id == editedItem.Id, update);
-        }
+            => await _collection.FindOneAndReplaceAsync(item => item.Id == editedItem.Id, editedItem);
 
         public async Task<IEnumerable<ListItem>> GetAllItemsAsync()
-        {
-            var items = await _collection.FindAsync(FilterDefinition<ListItem>.Empty);
-            return items.ToEnumerable();
-        }
+            => await _collection.Find(FilterDefinition<ListItem>.Empty).ToListAsync();
 
         public async Task<ListItem> GetItemAsync(Guid itemId)
-        {
-            var it = await _collection.FindAsync(item => item.Id == itemId);
-            return it.FirstOrDefault();
-        }
-
-        private static void MakeItemCompleted(ListItem item)
-        {
-            item.Id = Guid.NewGuid();
-            item.IsActive = false;
-            var time = DateTime.UtcNow;
-            item.CreationTime = time;
-            item.LastUpdateTime = time;
-        }
+            => (await _collection.FindAsync(item => item.Id == itemId)).FirstOrDefault();
     }
 }

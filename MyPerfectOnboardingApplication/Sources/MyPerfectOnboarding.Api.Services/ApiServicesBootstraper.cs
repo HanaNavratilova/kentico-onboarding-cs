@@ -7,7 +7,7 @@ using MyPerfectOnboarding.Contracts.Services.Location;
 
 namespace MyPerfectOnboarding.Api.Services
 {
-    public class ServicesBootstraper : IBootstraper
+    public class ApiServicesBootstraper : IBootstraper
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container

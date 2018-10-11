@@ -5,10 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
-using MyPerfectOnboarding.Api.Tests.Utils;
-using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
+using MyPerfectOnboarding.Contracts.Services.Database.Services;
 using MyPerfectOnboarding.Contracts.Services.Location;
+using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -39,16 +39,20 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             },
         };
 
-        private IListRepository _repository;
+        private IPostService _postService;
+        private IPutService _putService;
         private IUrlLocator _location;
+        private IListCache _cache;
 
         [SetUp]
         public void Init()
         {
-            _repository = Substitute.For<IListRepository>();
             _location = Substitute.For<IUrlLocator>();
+            _postService = Substitute.For<IPostService>();
+            _putService = Substitute.For<IPutService>();
+            _cache = Substitute.For<IListCache>();
 
-            _listController = new ListController(_repository, _location)
+            _listController = new ListController(_location, _postService, _putService, _cache)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -58,7 +62,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_ReturnsListOfItems()
         {
-            _repository.GetAllItemsAsync().Returns(Task.FromResult(_items as IEnumerable<ListItem>));
+            _cache.GetAllItemsAsync().Returns(Task.FromResult(_items as IEnumerable<ListItem>));
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync());
             message.TryGetContentValue(out IEnumerable<ListItem> items);
@@ -68,16 +72,38 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         }
 
         [Test]
-        public async Task Get_ReturnsItemWithGivenId()
+        public async Task Get_Id_ReturnsItemWithGivenId()
         {
             var expectedItem = _items[0];
-            _repository.GetItemAsync(expectedItem.Id).Returns(Task.FromResult(expectedItem));
+            _cache.ExistsItemWithId(expectedItem.Id).Returns(true);
+            _cache.GetItemAsync(expectedItem.Id).Returns(Task.FromResult(expectedItem));
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync(expectedItem.Id));
             message.TryGetContentValue(out ListItem item);
 
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(item, Is.EqualTo(expectedItem).UsingComparer());
+        }
+
+        [Test]
+        public async Task Get_Id_BadRequest()
+        {
+            var id = Guid.Empty;
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync(id));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async Task Get_Id_ReturnsNotFound()
+        {
+            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+            _cache.ExistsItemWithId(id).Returns(false);
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync(id));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
@@ -93,7 +119,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
                 LastUpdateTime = new DateTime(1896, 4, 7)
             };
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
-            _repository.AddItemAsync(newItem).Returns(createdItem);
+            _postService.AddItemAsync(newItem).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).PostAsync(newItem));
@@ -112,22 +138,69 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
             var item = new ListItem { Text = "newItem" };
+            _cache.ExistsItemWithId(id).Returns(true);
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
 
-            await _repository.Received().ReplaceItemAsync(item);
+            await _putService.Received().ReplaceItemAsync(item);
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+        }
+
+        [Test]
+        public async Task Put_BadRequestReturned()
+        {
+            var id = Guid.Empty;
+            var item = new ListItem { Text = "newItem" };
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async Task Put_NotFoundReturned()
+        {
+            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
+            var item = new ListItem { Text = "newItem" };
+            _cache.ExistsItemWithId(id).Returns(false);
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
         public async Task Delete_NoContentReturned()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+            _cache.ExistsItemWithId(id).Returns(true);
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).DeleteAsync(id));
 
-            await _repository.Received().DeleteItemAsync(id);
+            await _cache.Received().DeleteItemAsync(id);
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+        }
+
+        [Test]
+        public async Task Delete_BadRequestReturned()
+        {
+            var id = Guid.Empty;
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).DeleteAsync(id));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async Task Delete_NotFoundReturned()
+        {
+            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+
+            _cache.ExistsItemWithId(id).Returns(false);
+
+            var message = await _listController.ExecuteAction(controller => ((ListController)controller).DeleteAsync(id));
+
+            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
     }
 }
