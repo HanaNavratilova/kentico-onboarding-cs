@@ -2,7 +2,7 @@
 
 namespace MyPerfectOnboarding.Api.Configuration
 {
-    public class ControllersRouteNames: IControllersRouteNames
+    internal class ControllersRouteNames: IControllersRouteNames
     {
         public const string GetItemRouteName = "GetListItem";
 

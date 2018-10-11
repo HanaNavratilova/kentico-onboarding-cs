@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Dependency\IContainer.cs" />
     <Compile Include="Dependency\LifetimeManagerType.cs" />
+    <Compile Include="Services\Database\IConnectionDetails.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="IBootstraper.cs" />

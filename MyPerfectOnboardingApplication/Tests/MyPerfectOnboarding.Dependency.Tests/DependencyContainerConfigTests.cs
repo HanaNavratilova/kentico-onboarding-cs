@@ -33,7 +33,8 @@ namespace MyPerfectOnboarding.Dependency.Tests
         {
             var expectedTypes = GetExpectedTypes();
             var routeNames = new ControllersRouteNames();
-            var dependencyContainer = new DependencyContainerConfig(routeNames);
+            var connectionDetails = new ConnectionDetails();
+            var dependencyContainer = new DependencyContainerConfig(routeNames, connectionDetails);
             var config = Substitute.For<HttpConfiguration>();
 
             dependencyContainer.Register(config);

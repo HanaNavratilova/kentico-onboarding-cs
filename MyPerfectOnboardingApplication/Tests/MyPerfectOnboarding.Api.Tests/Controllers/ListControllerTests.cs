@@ -58,7 +58,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_ReturnsListOfItems()
         {
-            _repository.GetAllItemsAsync().Returns(Task.FromResult(_items));
+            _repository.GetAllItemsAsync().Returns(Task.FromResult(_items as IEnumerable<ListItem>));
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).GetAsync());
             message.TryGetContentValue(out IEnumerable<ListItem> items);

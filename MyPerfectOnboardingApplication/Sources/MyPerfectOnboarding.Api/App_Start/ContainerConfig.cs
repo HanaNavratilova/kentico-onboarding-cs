@@ -9,7 +9,8 @@ namespace MyPerfectOnboarding.Api
         public static void Register(HttpConfiguration config)
         {
             var routeNames = new ControllersRouteNames();
-            var dependencyContainerConfig = new DependencyContainerConfig(routeNames);
+            var connectionDetails = new ConnectionDetails();
+            var dependencyContainerConfig = new DependencyContainerConfig(routeNames, connectionDetails);
             dependencyContainerConfig.Register(config);
         }
     }
