@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
 
@@ -10,9 +11,9 @@ namespace MyPerfectOnboarding.Contracts.Database
 
         Task<ListItem> DeleteItemAsync(Guid id);
 
-        Task ReplaceItemAsync(ListItem editedItem);
+        Task<ListItem> ReplaceItemAsync(ListItem editedItem);
 
-        Task<ListItem[]> GetAllItemsAsync();
+        Task<IEnumerable<ListItem>> GetAllItemsAsync();
 
         Task<ListItem> GetItemAsync(Guid itemId);
     }
