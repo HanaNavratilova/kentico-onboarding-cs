@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using MyPerfectOnboarding.Api.Configuration;
+using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Dependency;
+using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Dependency.Containers;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ using Unity;
 namespace MyPerfectOnboarding.Dependency.Tests
 {
     [TestFixture]
-    class DependencyContainerConfigTests
+    internal class DependencyContainerConfigTests
     {
         private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {
@@ -29,11 +30,11 @@ namespace MyPerfectOnboarding.Dependency.Tests
         public void RegisterTypes_UnityContainer_RegisterAllBootstrapers()
         {
             var expectedTypes = GetExpectedTypes();
-            var routeNames = new ControllersRouteNames();
-
+            var routeNames = Substitute.For<IControllersRouteNames>(); ;          
+            var connectionDetails = Substitute.For<IConnectionDetails>(); ;
             IUnityContainer unityContainer = new UnityContainer();
             IContainer container = new Container(unityContainer);
-            var dependencyContainer = new DependencyContainerConfig(routeNames);
+            var dependencyContainer = new DependencyContainerConfig(routeNames, connectionDetails);
 
             dependencyContainer.RegisterTypes(container);
 
@@ -54,7 +55,8 @@ namespace MyPerfectOnboarding.Dependency.Tests
                     .Where(x => x.IsInterface)
                     .ToArray();
 
-            return Enumerable.Empty<Type>()
+            return Enumerable
+                .Empty<Type>()
                 .Union(TypesToRegisterExplicitly)
                 .Union(interfacesInContracts)
                 .Except(TypesNotToRegister)
