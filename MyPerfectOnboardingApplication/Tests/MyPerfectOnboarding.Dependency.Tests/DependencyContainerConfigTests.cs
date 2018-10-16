@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using MyPerfectOnboarding.Api.Configuration;
 using MyPerfectOnboarding.Contracts.Dependency;
+using MyPerfectOnboarding.Dependency.Containers;
+using NSubstitute;
 using NUnit.Framework;
 using Unity;
 
@@ -14,8 +16,7 @@ namespace MyPerfectOnboarding.Dependency.Tests
     {
         private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {
-            typeof(IBootstraper),
-            typeof(IContainer)
+            typeof(IBootstraper)
         };
 
         private static readonly IEnumerable<Type> TypesToRegisterExplicitly = new[]

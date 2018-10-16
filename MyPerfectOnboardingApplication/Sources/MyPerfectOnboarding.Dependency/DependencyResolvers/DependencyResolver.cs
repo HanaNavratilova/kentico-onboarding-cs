@@ -5,7 +5,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Exceptions;
 
-namespace MyPerfectOnboarding.Dependency
+namespace MyPerfectOnboarding.Dependency.DependencyResolvers
 {
     internal class DependencyResolver : IDependencyResolver
     {

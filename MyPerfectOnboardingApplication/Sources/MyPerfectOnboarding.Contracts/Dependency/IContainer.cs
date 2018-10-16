@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http.Dependencies;
 
 namespace MyPerfectOnboarding.Contracts.Dependency
 {
     public interface IContainer : IDisposable
     {
-       IContainer RegisterBootstraper<TBootstraper>() where TBootstraper: IBootstraper, new();
+        IContainer Register<TIType>(TIType instance);
 
-        IContainer RegisterType<TIType, TType>() where TType : TIType;
+        IContainer Register<TIType, TType>(Lifetime lifetime) where TType : TIType;
 
-        IContainer RegisterType<TType>(Func<TType> function);
+        IContainer Register<TType>(Func<TType> creatingFunction, Lifetime lifetime);
     }
 }

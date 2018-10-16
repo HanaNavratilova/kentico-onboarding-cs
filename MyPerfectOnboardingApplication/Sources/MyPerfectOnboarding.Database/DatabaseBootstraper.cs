@@ -8,6 +8,7 @@ namespace MyPerfectOnboarding.Database
     public class DatabaseBootstraper : IBootstraper
     {
         public IContainer RegisterTypesTo(IContainer container)
-            => container.RegisterType<IListRepository, ListRepository>();
+            => container
+                .Register<IListRepository, ListRepository>(Lifetime.PerRequest);
     }
 }

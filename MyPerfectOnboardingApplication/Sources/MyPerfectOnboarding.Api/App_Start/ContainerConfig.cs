@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using MyPerfectOnboarding.Api.Configuration;
 using MyPerfectOnboarding.Dependency;
 

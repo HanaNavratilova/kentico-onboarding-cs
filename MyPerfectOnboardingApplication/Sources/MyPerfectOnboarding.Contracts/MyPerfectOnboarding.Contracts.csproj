@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dependency\IContainer.cs" />
+    <Compile Include="Dependency\Lifetime.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="Dependency\IBootstraper.cs" />

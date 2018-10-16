@@ -79,9 +79,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Container.cs" />
+    <Compile Include="Containers\Container.cs" />
     <Compile Include="DependencyContainerConfig.cs" />
-    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="DependencyResolvers\DependencyResolver.cs" />
+    <Compile Include="Extensions\ContainerExtensions.cs" />
+    <Compile Include="Extensions\LifetimeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
