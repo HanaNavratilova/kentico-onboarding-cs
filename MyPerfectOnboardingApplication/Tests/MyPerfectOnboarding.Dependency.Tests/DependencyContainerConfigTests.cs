@@ -6,6 +6,7 @@ using System.Web.Http;
 using MyPerfectOnboarding.Api.Configuration;
 using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Dependency;
+using MyPerfectOnboarding.Dependency.Containers;
 using NSubstitute;
 using NUnit.Framework;
 using Unity;

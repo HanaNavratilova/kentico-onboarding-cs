@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Web;
 using MyPerfectOnboarding.Api.Services.Location;
 using MyPerfectOnboarding.Contracts;
@@ -12,8 +11,8 @@ namespace MyPerfectOnboarding.Api.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .RegisterType<IUrlLocator, UrlLocator>()
-                .RegisterType(GetMessage);
+                .RegisterType<IUrlLocator, UrlLocator>(LifetimeManagerType.HierarchicalLifetimeManager)
+                .RegisterType(GetMessage, LifetimeManagerType.HierarchicalLifetimeManager);
 
         private static HttpRequestMessage GetMessage()
             => HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;

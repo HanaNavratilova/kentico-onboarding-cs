@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http.Dependencies;
 
 namespace MyPerfectOnboarding.Contracts.Dependency
 {
@@ -12,9 +7,11 @@ namespace MyPerfectOnboarding.Contracts.Dependency
     {
        IContainer RegisterBootstraper<TBootstraper>() where TBootstraper: IBootstraper, new();
 
-        IContainer RegisterType<TIType, TType>() where TType : TIType;
+        IContainer RegisterInstance<TIType>(TIType instance);
 
-        IContainer RegisterType<TType>(Func<TType> function);
+        IContainer RegisterType<TIType, TType>(LifetimeManagerType type) where TType : TIType;
+
+        IContainer RegisterType<TType>(Func<TType> function, LifetimeManagerType type);
 
        IContainer CreateChildContainer();
 

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using MyPerfectOnboarding.Api.Services;
 using MyPerfectOnboarding.Contracts.Dependency;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Database;
+using MyPerfectOnboarding.Dependency.Containers;
+using MyPerfectOnboarding.Dependency.DependencyResolvers;
 using Unity;
 
 namespace MyPerfectOnboarding.Dependency
@@ -23,7 +24,7 @@ namespace MyPerfectOnboarding.Dependency
             => container
                 .RegisterBootstraper<DatabaseBootstraper>()
                 .RegisterBootstraper<ServicesBootstraper>()
-                .RegisterType(() => _routeNames);
+                .RegisterInstance(_routeNames);
 
         public void Register(HttpConfiguration config)
         {
