@@ -12,11 +12,5 @@ namespace MyPerfectOnboarding.Contracts.Dependency
         IContainer RegisterType<TIType, TType>(LifetimeManagerType type) where TType : TIType;
 
         IContainer RegisterType<TType>(Func<TType> function, LifetimeManagerType type);
-
-       IContainer CreateChildContainer();
-
-        object Resolve(Type serviceType);
-
-        IEnumerable<object> ResolveAll(Type serviceType);
     }
 }

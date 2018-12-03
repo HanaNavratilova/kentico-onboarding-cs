@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
-using MyPerfectOnboarding.Contracts.Dependency;
+using Unity;
 using Unity.Exceptions;
 
 namespace MyPerfectOnboarding.Dependency.DependencyResolvers
 {
     internal class DependencyResolver : IDependencyResolver
     {
-        private readonly IContainer _container;
+        private readonly IUnityContainer _container;
 
-        public DependencyResolver(IContainer container)
+        public DependencyResolver(IUnityContainer container)
         {
             _container = container;
         }

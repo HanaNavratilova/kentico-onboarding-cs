@@ -13,13 +13,11 @@ namespace MyPerfectOnboarding.Dependency
 {
     public class DependencyContainerConfig
     {
-        internal readonly IContainer Container;
         private readonly IControllersRouteNames _routeNames;
         private readonly IConnectionDetails _connectionDetails;
 
         public DependencyContainerConfig(IControllersRouteNames routeNames, IConnectionDetails connectionDetails)
         {
-            Container = new Container(new UnityContainer());
             _routeNames = routeNames;
             _connectionDetails = connectionDetails;
         }
@@ -34,8 +32,10 @@ namespace MyPerfectOnboarding.Dependency
 
         public void Register(HttpConfiguration config)
         {
-            RegisterTypes(Container);
-            var dependencyResolver = new DependencyResolver(Container);
+            var unityContainer = new UnityContainer();
+            var container = new Container(unityContainer);
+            RegisterTypes(container);
+            var dependencyResolver = new DependencyResolver(unityContainer);
             config.DependencyResolver = dependencyResolver;
         }
     }

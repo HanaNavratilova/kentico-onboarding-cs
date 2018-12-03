@@ -20,18 +20,6 @@ namespace MyPerfectOnboarding.Dependency.Containers
         public void Dispose()
             => UnityContainer.Dispose();
 
-        public IContainer CreateChildContainer()
-        {
-            var child = UnityContainer.CreateChildContainer();
-            return new Container(child);
-        }
-
-        public object Resolve(Type serviceType) 
-            => UnityContainer.Resolve(serviceType);
-
-        public IEnumerable<object> ResolveAll(Type serviceType)
-            => UnityContainer.ResolveAll(serviceType);
-
         public IContainer RegisterBootstraper<TBootstraper>() where TBootstraper : IBootstraper, new()
         {
             new TBootstraper().RegisterTypesTo(this);

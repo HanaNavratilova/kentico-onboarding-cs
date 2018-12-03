@@ -34,21 +34,18 @@ namespace MyPerfectOnboarding.Dependency.Tests
             var expectedTypes = GetExpectedTypes();
             var routeNames = new ControllersRouteNames();
             var connectionDetails = new ConnectionDetails();
+            IUnityContainer unityContainer = new UnityContainer();
+            IContainer container = new Container(unityContainer);
             var dependencyContainer = new DependencyContainerConfig(routeNames, connectionDetails);
-            var config = Substitute.For<HttpConfiguration>();
 
-            dependencyContainer.Register(config);
-            if (dependencyContainer.Container is Container container) { 
-                var unityContainer = container.UnityContainer;
-                var registeredTypes = unityContainer.Registrations.Select(r => r.RegisteredType).ToArray();
+            dependencyContainer.RegisterTypes(container);
 
-                var missingTypes = registeredTypes.Except(expectedTypes).ToHashSet();
-                var unwantedTypes = expectedTypes.Except(registeredTypes).ToHashSet();
+            var registeredTypes = unityContainer.Registrations.Select(r => r.RegisteredType).ToArray();
+            var missingTypes = registeredTypes.Except(expectedTypes).ToHashSet();
+            var unwantedTypes = expectedTypes.Except(registeredTypes).ToHashSet();
 
-                Assert.That(unwantedTypes, Is.Empty, "Following types were registered but they should not be:");
-                Assert.That(missingTypes, Is.Empty, "Following types should be registered:");
-            }
-            Assert.That(dependencyContainer.Container, Is.Not.Null, "Container is null");
+            Assert.That(unwantedTypes, Is.Empty, "Following types were registered but they should not be:");
+            Assert.That(missingTypes, Is.Empty, "Following types should be registered:");
         }
 
         private static HashSet<Type> GetExpectedTypes()
