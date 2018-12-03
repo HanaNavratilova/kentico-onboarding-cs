@@ -4,7 +4,6 @@ using MyPerfectOnboarding.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyPerfectOnboarding.Contracts.Services.Database;
 
 namespace MyPerfectOnboarding.Database.Repository
 {
@@ -36,6 +35,6 @@ namespace MyPerfectOnboarding.Database.Repository
             => await _collection.Find(FilterDefinition<ListItem>.Empty).ToListAsync();
 
         public async Task<ListItem> GetItemAsync(Guid itemId)
-            => (await _collection.FindAsync(item => item.Id == itemId)).FirstOrDefault();
+            => await _collection.Find(item => item.Id == itemId).FirstOrDefaultAsync();
     }
 }

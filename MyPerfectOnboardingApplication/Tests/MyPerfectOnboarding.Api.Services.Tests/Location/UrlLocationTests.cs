@@ -32,8 +32,7 @@ namespace MyPerfectOnboarding.Api.Services.Tests.Location
                 .Link(
                     routeName,
                     Arg.Is<object>(routeValues => IsGivenIdInRouteValues(routeValues, id)))
-                        .Returns(expectedUri.ToString()
-                );
+                .Returns(expectedUri.ToString());
 
             var urlLocatorConfig = Substitute.For<IControllersRouteNames>();
             urlLocatorConfig

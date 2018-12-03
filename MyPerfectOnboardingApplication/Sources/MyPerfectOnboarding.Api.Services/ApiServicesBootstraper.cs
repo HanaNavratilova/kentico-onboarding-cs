@@ -11,8 +11,8 @@ namespace MyPerfectOnboarding.Api.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .RegisterType<IUrlLocator, UrlLocator>(LifetimeManagerType.HierarchicalLifetimeManager)
-                .RegisterType(GetMessage, LifetimeManagerType.HierarchicalLifetimeManager);
+                .RegisterType<IUrlLocator, UrlLocator>(Lifetime.PerRequest)
+                .RegisterType(GetMessage, Lifetime.PerRequest);
 
         private static HttpRequestMessage GetMessage()
             => HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;

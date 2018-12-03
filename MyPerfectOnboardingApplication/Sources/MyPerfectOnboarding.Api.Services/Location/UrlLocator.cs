@@ -16,6 +16,11 @@ namespace MyPerfectOnboarding.Api.Services.Location
         }
 
         public Uri GetListItemLocation(Guid id)
-            => new Uri(_urlHelper.Link(_urlLocatorConfig.ListItemRouteName, new { id }));
+        {
+            var routeValues = new { id };
+            var listItemLink = _urlHelper.Link(_urlLocatorConfig.ListItemRouteName, routeValues);
+
+            return new Uri(listItemLink);
+        }
     }
 }

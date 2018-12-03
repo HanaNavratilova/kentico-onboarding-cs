@@ -23,15 +23,14 @@ namespace MyPerfectOnboarding.Dependency.DependencyResolvers
         }
 
         public void Dispose()
-        {
-            _container.Dispose();
-        }
+            => _container.Dispose();
 
         public object GetService(Type serviceType)
         {
             try
             {
-                return _container.Resolve(serviceType);
+                var resolve = _container.Resolve(serviceType);
+                return resolve;
             }
             catch (ResolutionFailedException)
             {

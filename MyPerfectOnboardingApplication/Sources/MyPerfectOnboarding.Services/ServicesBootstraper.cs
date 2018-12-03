@@ -1,7 +1,7 @@
 ﻿using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Dependency;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
-using MyPerfectOnboarding.Contracts.Services.Database.Services;
+using MyPerfectOnboarding.Contracts.Services.Generators;
+using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Generators;
 using MyPerfectOnboarding.Services.Services;
 
@@ -11,10 +11,10 @@ namespace MyPerfectOnboarding.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .RegisterType<IPutService, PutService>(LifetimeManagerType.HierarchicalLifetimeManager)
-                .RegisterType<IPostService, PostService>(LifetimeManagerType.HierarchicalLifetimeManager)
-                .RegisterType<IListCache, ListCache>(LifetimeManagerType.ContainerControlledLifetimeManager)
-                .RegisterType<IGuidGenerator, GuidGenerator>(LifetimeManagerType.ContainerControlledLifetimeManager)
-                .RegisterType<ITimeGenerator, TimeGenerator>(LifetimeManagerType.ContainerControlledLifetimeManager);
+                .RegisterType<IPutService, PutService>(Lifetime.PerRequest)
+                .RegisterType<IPostService, PostService>(Lifetime.PerRequest)
+                .RegisterType<IListCache, ListCache>(Lifetime.PerApplication)
+                .RegisterType<IGuidGenerator, GuidGenerator>(Lifetime.PerApplication)
+                .RegisterType<ITimeGenerator, TimeGenerator>(Lifetime.PerApplication);
     }
 }

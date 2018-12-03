@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
+using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Services.Generators;
 using NUnit.Framework;
 
 namespace MyPerfectOnboarding.Services.Tests.Generators
 {
     [TestFixture]
-    class GuidGeneratorTests
+    internal class GuidGeneratorTests
     {
-
         private IGuidGenerator _guidGenerator;
 
         [SetUp]
@@ -21,10 +20,14 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
         [Test]
         public void Generate_ReturnsGuid()
         {
-            var listOfGuids = new Guid[20].Select(_ => _guidGenerator.Generate()).ToArray();
-            var setOfGuids = listOfGuids.ToHashSet();
+            const int numberOfGeneratedGuids = 20;
+            var listOfIds = Enumerable
+                .Repeat<Func<Guid>>(_guidGenerator.Generate, numberOfGeneratedGuids)
+                .Select(generator => generator())
+                .ToArray();
+            var setOfIds = listOfIds.ToHashSet();
 
-            Assert.That(listOfGuids.Count(), Is.EqualTo(setOfGuids.Count));
+            Assert.That(listOfIds.Count, Is.EqualTo(setOfIds.Count));
         }
     }
 }

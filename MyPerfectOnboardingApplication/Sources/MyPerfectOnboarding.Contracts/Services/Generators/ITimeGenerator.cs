@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyPerfectOnboarding.Contracts.Services.Database.Generators
+namespace MyPerfectOnboarding.Contracts.Services.Generators
 {
     public interface ITimeGenerator
     {

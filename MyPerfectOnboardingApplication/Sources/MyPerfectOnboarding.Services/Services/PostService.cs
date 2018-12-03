@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
-using MyPerfectOnboarding.Contracts.Services.Database.Services;
+using MyPerfectOnboarding.Contracts.Services.Generators;
+using MyPerfectOnboarding.Contracts.Services.ListItem;
 
 namespace MyPerfectOnboarding.Services.Services
 {

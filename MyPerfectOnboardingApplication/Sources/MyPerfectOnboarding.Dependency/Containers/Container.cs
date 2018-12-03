@@ -20,21 +20,23 @@ namespace MyPerfectOnboarding.Dependency.Containers
         public void Dispose()
             => UnityContainer.Dispose();
 
-        public IContainer RegisterBootstraper<TBootstraper>() where TBootstraper : IBootstraper, new()
+        public IContainer RegisterBootstraper<TBootstraper>()
+            where TBootstraper : IBootstraper, new()
         {
             new TBootstraper().RegisterTypesTo(this);
             return this;
         }
 
-        public IContainer RegisterType<TIType, TType>(LifetimeManagerType type) where TType : TIType
+        public IContainer RegisterType<TIType, TType>(Lifetime lifetime)
+            where TType : TIType
         {
-            UnityContainer.RegisterType<TIType, TType>(type.CreateLifetimeManager());
+            UnityContainer.RegisterType<TIType, TType>(lifetime.CreateLifetimeManager());
             return this;
         }
 
-        public IContainer RegisterType<TType>(Func<TType> function, LifetimeManagerType type)
+        public IContainer RegisterType<TType>(Func<TType> creatingFunction, Lifetime lifetime)
         {
-            UnityContainer.RegisterType<TType>(type.CreateLifetimeManager(), new InjectionFactory(_ => function()));
+            UnityContainer.RegisterType<TType>(lifetime.CreateLifetimeManager(), new InjectionFactory(_ => creatingFunction()));
             return this;
         }
 

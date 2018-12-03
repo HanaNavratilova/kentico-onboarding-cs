@@ -1,4 +1,4 @@
-﻿namespace MyPerfectOnboarding.Contracts.Services.Database
+﻿namespace MyPerfectOnboarding.Contracts.Database
 {
     public interface IConnectionDetails
     {

@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="Comparers\ListItemEqualityComparer.cs" />
     <Compile Include="Extensions\ApiControllerExtension.cs" />
-    <Compile Include="Extensions\EqualConstraintExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

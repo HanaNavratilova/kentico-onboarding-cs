@@ -1,5 +1,5 @@
 ﻿using System;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
+using MyPerfectOnboarding.Contracts.Services.Generators;
 
 namespace MyPerfectOnboarding.Services.Generators
 {

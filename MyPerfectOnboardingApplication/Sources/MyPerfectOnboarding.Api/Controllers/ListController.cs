@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
 using MyPerfectOnboarding.Contracts.Models;
-using MyPerfectOnboarding.Contracts.Services.Database.Services;
+using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Contracts.Services.Location;
 
 namespace MyPerfectOnboarding.Api.Controllers
@@ -13,8 +13,7 @@ namespace MyPerfectOnboarding.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     [Route("")]
     public class ListController : ApiController
-    {
-        
+    {  
         private readonly IUrlLocator _urlLocation;
         private readonly IPostService _postService;
         private readonly IPutService _putService;
@@ -46,7 +45,7 @@ namespace MyPerfectOnboarding.Api.Controllers
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
-            if (item.Text == string.Empty)
+            if (string.IsNullOrEmpty(item.Text))
                 return BadRequest("Text was empty.");
 
             var newItem = await _postService.AddItemAsync(item);

@@ -1,11 +1,11 @@
 ﻿using System;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
+using MyPerfectOnboarding.Contracts.Services.Generators;
 
 namespace MyPerfectOnboarding.Services.Generators
 {
     internal class TimeGenerator : ITimeGenerator
     {
         public DateTime GetCurrentTime()
-            => DateTime.Now;
+            => DateTime.UtcNow;
     }
 }

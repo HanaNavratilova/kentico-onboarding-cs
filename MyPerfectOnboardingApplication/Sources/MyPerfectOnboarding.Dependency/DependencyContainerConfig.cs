@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using MyPerfectOnboarding.Api.Services;
+using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Dependency;
-using MyPerfectOnboarding.Contracts.Services.Database;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Database;
 using MyPerfectOnboarding.Dependency.Containers;
@@ -16,7 +16,12 @@ namespace MyPerfectOnboarding.Dependency
         private readonly IControllersRouteNames _routeNames;
         private readonly IConnectionDetails _connectionDetails;
 
-        public DependencyContainerConfig(IControllersRouteNames routeNames, IConnectionDetails connectionDetails)
+        public static DependencyContainerConfig Create<TRouteNames, TConnection>()
+            where TRouteNames : IControllersRouteNames, new()
+            where TConnection : IConnectionDetails, new()
+            => new DependencyContainerConfig(new TRouteNames(), new TConnection());
+
+        internal DependencyContainerConfig(IControllersRouteNames routeNames, IConnectionDetails connectionDetails)
         {
             _routeNames = routeNames;
             _connectionDetails = connectionDetails;
@@ -28,13 +33,16 @@ namespace MyPerfectOnboarding.Dependency
                 .RegisterBootstraper<ApiServicesBootstraper>()
                 .RegisterBootstraper<ServicesBootstraper>()
                 .RegisterInstance(_connectionDetails)
-                .RegisterInstance(_routeNames);
+                .RegisterInstance(_routeNames)
+                .RegisterInstance(container);
 
         public void Register(HttpConfiguration config)
         {
             var unityContainer = new UnityContainer();
             var container = new Container(unityContainer);
+
             RegisterTypes(container);
+
             var dependencyResolver = new DependencyResolver(unityContainer);
             config.DependencyResolver = dependencyResolver;
         }
