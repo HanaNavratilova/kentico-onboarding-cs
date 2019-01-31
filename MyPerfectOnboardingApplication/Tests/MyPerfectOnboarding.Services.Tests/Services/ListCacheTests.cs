@@ -108,6 +108,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             var item = new ListItem { Id = id };
             _listRepository.GetAllItemsAsync().Returns(_items);
 
+            // one needs to understand that item does not exists
             await _listCache.ReplaceItemAsync(item);
 
             await _listRepository.DidNotReceive().ReplaceItemAsync(item);
@@ -119,9 +120,11 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listRepository.GetAllItemsAsync().Returns(_items);
 
             var items = await _listCache.GetAllItemsAsync();
+            var items2 = await _listCache.GetAllItemsAsync();
 
             await _listRepository.Received(1).GetAllItemsAsync();
             Assert.That(items, Is.EqualTo(_items));
+            Assert.That(items2, Is.EqualTo(_items));
         }
 
         [Test]
@@ -131,7 +134,8 @@ namespace MyPerfectOnboarding.Services.Tests.Services
 
             var item = await _listCache.GetItemAsync(_items[0].Id);
 
-            await _listRepository.DidNotReceive().GetItemAsync(_items[0].Id);
+            //in all tests:
+            await _listRepository.DidNotReceive().GetItemAsync(Arg.Any<Guid>());
             Assert.That(item, Is.EqualTo(_items[0]));
         }
 
@@ -144,14 +148,14 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             var item = await _listCache.GetItemAsync(id);
 
             await _listRepository.DidNotReceive().GetItemAsync(id);
+            //should not be null but exception
             Assert.That(item, Is.Null);
         }
 
         [Test]
-        public async Task ExistsItemWithId_itemId_ReturnsTrue()
+        public void ExistsItemWithId_itemId_ReturnsTrue()
         {
             _listRepository.GetAllItemsAsync().Returns(_items);
-            await _listCache.GetAllItemsAsync();
 
             var result = _listCache.ExistsItemWithId(_items[0].Id);
 
@@ -163,11 +167,14 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
             _listRepository.GetAllItemsAsync().Returns(_items);
-            await _listCache.GetAllItemsAsync();
 
             var result = _listCache.ExistsItemWithId(id);
 
             Assert.That(result, Is.False);
+            // In reasonable amount of other tests:
+            //Assert.That(_listCache.Items, Is.EqualTo(_items));
+            // or
+            await _listRepository.Received(1).GetAllItemsAsync();
         }
     }
 }
