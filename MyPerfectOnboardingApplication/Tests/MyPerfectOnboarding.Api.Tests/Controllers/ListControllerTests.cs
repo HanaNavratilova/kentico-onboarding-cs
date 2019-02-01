@@ -75,7 +75,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public async Task Get_ExistingId_ReturnsItemWithGivenId()
         {
             var expectedItem = _items[0];
-            _cache.ExistsItemWithId(expectedItem.Id).Returns(true);
+            _cache.ExistsItemWithIdAsync(expectedItem.Id).Returns(true);
             _cache.GetItemAsync(expectedItem.Id).Returns(expectedItem);
 
             var message = await _listController.ExecuteAction(controller => controller.GetAsync(expectedItem.Id));
@@ -99,7 +99,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public async Task Get_NonexistentId_ReturnsNotFound()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            _cache.ExistsItemWithId(id).Returns(false);
+            _cache.ExistsItemWithIdAsync(id).Returns(false);
 
             var message = await _listController.ExecuteAction(controller => controller.GetAsync(id));
 
@@ -166,7 +166,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
             var item = new ListItem { Text = "newItem" };
-            _cache.ExistsItemWithId(id).Returns(true);
+            _cache.ExistsItemWithIdAsync(id).Returns(true);
 
             var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
 
@@ -190,7 +190,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
             var item = new ListItem { Text = "newItem" };
-            _cache.ExistsItemWithId(id).Returns(false);
+            _cache.ExistsItemWithIdAsync(id).Returns(false);
 
             var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
 
@@ -201,7 +201,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public async Task Delete_NoContentReturned()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            _cache.ExistsItemWithId(id).Returns(true);
+            _cache.ExistsItemWithIdAsync(id).Returns(true);
 
             var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
 
@@ -223,7 +223,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public async Task Delete_NotFoundReturned()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            _cache.ExistsItemWithId(id).Returns(false);
+            _cache.ExistsItemWithIdAsync(id).Returns(false);
 
             var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
 

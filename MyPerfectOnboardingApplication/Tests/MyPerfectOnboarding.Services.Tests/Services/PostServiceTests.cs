@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
-using MyPerfectOnboarding.Contracts.Services.Database.Services;
+using MyPerfectOnboarding.Contracts.Services.Generators;
+using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Services;
 using MyPerfectOnboarding.Tests.Utils.Comparers;
 using NSubstitute;
@@ -31,33 +31,29 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public async Task AddItemAsync_item_AddItemIntoRepo()
         {
+            // all properties but Text are supposed to be ignored, hence non-default values that would normally be passed in
             var item = new ListItem
             {
-                Id = Guid.Empty,
+                Id = new Guid("D19AC027-B913-4F55-8F21-869A784AEB29"),
                 Text = "aaaaa",
-                IsActive = false,
+                IsActive = true,
                 CreationTime = new DateTime(1589, 12, 3),
                 LastUpdateTime = new DateTime(1589, 12, 3)
             };
             var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
             var time = new DateTime(2150, 12, 5);
-            _timeGenerator.GetCurrentTime().Returns(time);
+            // IMPORTANT: second parameter ;)
+            _timeGenerator.GetCurrentTime().Returns(time, DateTime.MinValue);
             _guidGenerator.Generate().Returns(id);
-            _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null);
-            var expectedItem = new ListItem
-            {
-                Id = id,
-                Text = item.Text,
-                IsActive = false,
-                CreationTime = time,
-                LastUpdateTime = time
-            };
+            _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null, new ListItem());
 
             
-            await _postService.AddItemAsync(item);
+            var result = await _postService.AddItemAsync(item);
 
-            await _listCache.Received(3).GetItemAsync(Arg.Any<Guid>());
-            await _listCache.Received(1).AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
+            _guidGenerator.Received(3).Generate();
+            await _listCache.Received(1).AddItemAsync(item); //-ish
+            //await _listCache.Received(1).AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
+            //Assert.That(result, Is.EqualTo(item));
         }
     }
 }

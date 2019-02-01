@@ -60,7 +60,7 @@ namespace MyPerfectOnboarding.Api.Controllers
             if (!IsIdValid(id))
                 return BadRequest("Id is invalid.");
 
-            if (!_cache.ExistsItemWithId(id))
+            if (!await _cache.ExistsItemWithIdAsync(id))
                 return NotFound();
 
             await _putService.ReplaceItemAsync(editedItem);
@@ -76,7 +76,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return BadRequest("Id is invalid.");
             }
 
-            if (!_cache.ExistsItemWithId(id))
+            if (!await _cache.ExistsItemWithIdAsync(id))
                 return NotFound();
 
             await _cache.DeleteItemAsync(id);

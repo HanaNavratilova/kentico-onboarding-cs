@@ -153,11 +153,11 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         }
 
         [Test]
-        public void ExistsItemWithId_itemId_ReturnsTrue()
+        public async Task ExistsItemWithId_itemId_ReturnsTrue()
         {
             _listRepository.GetAllItemsAsync().Returns(_items);
 
-            var result = _listCache.ExistsItemWithId(_items[0].Id);
+            var result = await _listCache.ExistsItemWithIdAsync(_items[0].Id);
 
             Assert.That(result, Is.True);
         }
@@ -168,7 +168,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
             _listRepository.GetAllItemsAsync().Returns(_items);
 
-            var result = _listCache.ExistsItemWithId(id);
+            var result = await _listCache.ExistsItemWithIdAsync(id);
 
             Assert.That(result, Is.False);
             // In reasonable amount of other tests:

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
@@ -26,16 +27,22 @@ namespace MyPerfectOnboarding.Services.Services
 
         private async Task MakeItemCompleted(ListItem item)
         {
+            item.Id = await GetIdAsync();
+            item.IsActive = false;
+            var time = _timeGenerator.GetCurrentTime();
+            item.CreationTime = time;
+            item.LastUpdateTime = time;
+        }
+
+        private async Task<Guid> GetIdAsync()
+        {
             var id = _guidGenerator.Generate();
             while (await _cache.GetItemAsync(id) != null)
             {
                 id = _guidGenerator.Generate();
             }
-            item.Id = id;
-            item.IsActive = false;
-            var time = _timeGenerator.GetCurrentTime();
-            item.CreationTime = time;
-            item.LastUpdateTime = time;
+
+            return id;
         }
     }
 }

@@ -16,6 +16,6 @@ namespace MyPerfectOnboarding.Contracts.Services.ListItem
 
         Task<Models.ListItem> GetItemAsync(Guid itemId);
 
-        bool ExistsItemWithId(Guid id);
+        Task<bool> ExistsItemWithIdAsync(Guid id);
     }
 }

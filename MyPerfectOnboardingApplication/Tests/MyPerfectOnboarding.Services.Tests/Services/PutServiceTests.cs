@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
-using MyPerfectOnboarding.Contracts.Services.Database.Generators;
-using MyPerfectOnboarding.Contracts.Services.Database.Services;
+using MyPerfectOnboarding.Contracts.Services.Generators;
+using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Services;
 using MyPerfectOnboarding.Tests.Utils.Comparers;
 using NSubstitute;
@@ -58,8 +58,9 @@ namespace MyPerfectOnboarding.Services.Tests.Services
                 CreationTime = item.CreationTime,
                 LastUpdateTime = updateTime
             };
+
             _listCache.GetItemAsync(id).Returns(item);
-            _timeGenerator.GetCurrentTime().Returns(updateTime);
+            _timeGenerator.GetCurrentTime().Returns(updateTime, DateTime.MinValue);
 
             await _putService.ReplaceItemAsync(editedItem);
 
