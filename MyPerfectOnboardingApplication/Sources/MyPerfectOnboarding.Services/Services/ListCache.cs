@@ -23,8 +23,8 @@ namespace MyPerfectOnboarding.Services.Services
         public async Task<ListItem> AddItemAsync(ListItem item)
             => await ExecuteFunctionAsync(async () =>
             {
-                var addedItem = item;
-                Items.TryAdd(item.Id, addedItem);
+                Items.TryAdd(item.Id, item);
+                Items.AddOrUpdate(item.Id, item, (id, oldItem) => item);
 
                 return await _listRepository.AddItemAsync(item);
             });
