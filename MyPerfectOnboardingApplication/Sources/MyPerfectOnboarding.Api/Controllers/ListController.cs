@@ -72,9 +72,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
             if (!IsIdValid(id))
-            {
                 return BadRequest("Id is invalid.");
-            }
 
             if (!await _cache.ExistsItemWithIdAsync(id))
                 return NotFound();
@@ -84,9 +82,7 @@ namespace MyPerfectOnboarding.Api.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        private static bool IsIdValid(Guid id)
-        {
-            return id != Guid.Empty;
-        }
+        private static bool IsIdValid(Guid id) 
+            => id != Guid.Empty;
     }
 }
