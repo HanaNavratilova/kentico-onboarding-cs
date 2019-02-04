@@ -2,8 +2,8 @@
 
 namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
-    public interface IPutService
+    public interface IAdditionService
     {
-        Task ReplaceItemAsync(Models.ListItem editedItem);
+        Task<Models.ListItem> AddItemAsync(Models.ListItem item);
     }
 }

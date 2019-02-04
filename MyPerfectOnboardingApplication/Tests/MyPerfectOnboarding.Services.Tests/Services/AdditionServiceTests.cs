@@ -10,12 +10,12 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Services.Tests.Services
 {
     [TestFixture]
-    class PostServiceTests
+    class AdditionServiceTests
     {
         private IListCache _listCache;
         private ITimeGenerator _timeGenerator;
         private IGuidGenerator _guidGenerator;
-        private PostService _postService;
+        private AdditionService _additionService;
 
         [SetUp]
         public void Init()
@@ -24,7 +24,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _timeGenerator = Substitute.For<ITimeGenerator>();
             _guidGenerator = Substitute.For<IGuidGenerator>();
 
-            _postService = new PostService(_listCache, _timeGenerator, _guidGenerator);
+            _additionService = new AdditionService(_listCache, _timeGenerator, _guidGenerator);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null, new ListItem());
 
             
-            var result = await _postService.AddItemAsync(item);
+            var result = await _additionService.AddItemAsync(item);
 
             _guidGenerator.Received(3).Generate();
             await _listCache.Received(1).AddItemAsync(item); //-ish

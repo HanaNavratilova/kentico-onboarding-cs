@@ -15,15 +15,15 @@ namespace MyPerfectOnboarding.Api.Controllers
     public class ListController : ApiController
     {  
         private readonly IUrlLocator _urlLocation;
-        private readonly IPostService _postService;
-        private readonly IPutService _putService;
+        private readonly IAdditionService _additionService;
+        private readonly IEditingService _editingService;
         private readonly IListCache _cache;
 
-        public ListController(IUrlLocator urlLocation, IPostService postService, IPutService putService, IListCache cache)
+        public ListController(IUrlLocator urlLocation, IAdditionService additionService, IEditingService editingService, IListCache cache)
         {
             _urlLocation = urlLocation;
-            _postService = postService;
-            _putService = putService;
+            _additionService = additionService;
+            _editingService = editingService;
             _cache = cache;
         }
 
@@ -63,7 +63,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var newItem = await _postService.AddItemAsync(item);
+            var newItem = await _additionService.AddItemAsync(item);
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
             return Created(location, newItem);
@@ -90,7 +90,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return await PostAsync(editedItem);
             }
 
-            await _putService.ReplaceItemAsync(editedItem);
+            await _editingService.ReplaceItemAsync(editedItem);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

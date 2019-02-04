@@ -40,8 +40,8 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             },
         };
 
-        private IPostService _postService;
-        private IPutService _putService;
+        private IAdditionService _additionService;
+        private IEditingService _editingService;
         private IUrlLocator _location;
         private IListCache _cache;
 
@@ -49,11 +49,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public void Init()
         {
             _location = Substitute.For<IUrlLocator>();
-            _postService = Substitute.For<IPostService>();
-            _putService = Substitute.For<IPutService>();
+            _additionService = Substitute.For<IAdditionService>();
+            _editingService = Substitute.For<IEditingService>();
             _cache = Substitute.For<IListCache>();
 
-            _listController = new ListController(_location, _postService, _putService, _cache)
+            _listController = new ListController(_location, _additionService, _editingService, _cache)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -121,7 +121,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             var createdItem = _items[0];
             var newItem = new ListItem { Text = createdItem.Text };
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
-            _postService.AddItemAsync(newItem).Returns(createdItem);
+            _additionService.AddItemAsync(newItem).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
             var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
@@ -255,7 +255,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             Assert.Multiple(async () =>
             {
-                await _putService.Received().ReplaceItemAsync(item);
+                await _editingService.Received().ReplaceItemAsync(item);
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             });
         }
@@ -278,7 +278,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             var createdItem = _items[0];
             _cache.ExistsItemWithIdAsync(id).Returns(false);
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
-            _postService.AddItemAsync(item).Returns(createdItem);
+            _additionService.AddItemAsync(item).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
             var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));

@@ -5,12 +5,12 @@ using MyPerfectOnboarding.Contracts.Services.ListItem;
 
 namespace MyPerfectOnboarding.Services.Services
 {
-    internal class PutService : IPutService
+    internal class EditingService : IEditingService
     {
         private readonly IListCache _cache;
         private readonly ITimeGenerator _timeGenerator;
 
-        public PutService(IListCache cache, ITimeGenerator timeGenerator)
+        public EditingService(IListCache cache, ITimeGenerator timeGenerator)
         {
             _cache = cache;
             _timeGenerator = timeGenerator;

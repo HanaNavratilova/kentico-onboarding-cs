@@ -11,8 +11,8 @@ namespace MyPerfectOnboarding.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .Register<IPutService, PutService>(Lifetime.PerRequest)
-                .Register<IPostService, PostService>(Lifetime.PerRequest)
+                .Register<IEditingService, EditingService>(Lifetime.PerRequest)
+                .Register<IAdditionService, AdditionService>(Lifetime.PerRequest)
                 .Register<IListCache, ListCache>(Lifetime.PerApplication)
                 .Register<IGuidGenerator, GuidGenerator>(Lifetime.PerApplication)
                 .Register<ITimeGenerator, TimeGenerator>(Lifetime.PerApplication);

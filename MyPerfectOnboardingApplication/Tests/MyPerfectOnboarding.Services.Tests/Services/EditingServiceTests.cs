@@ -11,11 +11,11 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Services.Tests.Services
 {
     [TestFixture]
-    class PutServiceTests
+    class EditingServiceTests
     {
         private IListCache _listCache;
         private ITimeGenerator _timeGenerator;
-        private PutService _putService;
+        private EditingService _editingService;
 
         [SetUp]
         public void Init()
@@ -23,7 +23,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listCache = Substitute.For<IListCache>();
             _timeGenerator = Substitute.For<ITimeGenerator>();
 
-            _putService = new PutService(_listCache, _timeGenerator);
+            _editingService = new EditingService(_listCache, _timeGenerator);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listCache.GetItemAsync(id).Returns(item);
             _timeGenerator.GetCurrentTime().Returns(updateTime, DateTime.MinValue);
 
-            await _putService.ReplaceItemAsync(editedItem);
+            await _editingService.ReplaceItemAsync(editedItem);
 
             await _listCache.Received(1).ReplaceItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
         }

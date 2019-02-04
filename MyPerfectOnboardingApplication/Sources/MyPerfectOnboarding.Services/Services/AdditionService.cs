@@ -6,13 +6,13 @@ using MyPerfectOnboarding.Contracts.Services.ListItem;
 
 namespace MyPerfectOnboarding.Services.Services
 {
-    internal class PostService : IPostService
+    internal class AdditionService : IAdditionService
     {
         private readonly IListCache _cache;
         private readonly ITimeGenerator _timeGenerator;
         private readonly IGuidGenerator _guidGenerator;
 
-        public PostService(IListCache cache, ITimeGenerator timeGenerator, IGuidGenerator guidGenerator)
+        public AdditionService(IListCache cache, ITimeGenerator timeGenerator, IGuidGenerator guidGenerator)
         {
             _cache = cache;
             _timeGenerator = timeGenerator;
