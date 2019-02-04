@@ -1,4 +1,5 @@
-﻿using MyPerfectOnboarding.Contracts.Dependency;
+﻿using System;
+using MyPerfectOnboarding.Contracts.Dependency;
 using Unity.Lifetime;
 
 namespace MyPerfectOnboarding.Dependency.Extensions
@@ -14,7 +15,7 @@ namespace MyPerfectOnboarding.Dependency.Extensions
                 case Lifetime.PerApplication:
                     return new ContainerControlledLifetimeManager();
                 default:
-                    return null;
+                    throw new ArgumentOutOfRangeException($"There is no unity lifetime manager of this type.");
             }
         }
     }
