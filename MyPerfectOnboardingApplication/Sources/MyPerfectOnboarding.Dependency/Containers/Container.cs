@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Dependency;
 using MyPerfectOnboarding.Dependency.Extensions;
 using Unity;

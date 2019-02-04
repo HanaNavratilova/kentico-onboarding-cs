@@ -4,7 +4,6 @@ using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Services;
-using MyPerfectOnboarding.Tests.Utils.Comparers;
 using NSubstitute;
 using NUnit.Framework;
 
