@@ -9,6 +9,6 @@ namespace MyPerfectOnboarding.Database
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .RegisterType<IListRepository, ListRepository>(Lifetime.PerRequest);
+                .Register<IListRepository, ListRepository>(Lifetime.PerRequest);
     }
 }

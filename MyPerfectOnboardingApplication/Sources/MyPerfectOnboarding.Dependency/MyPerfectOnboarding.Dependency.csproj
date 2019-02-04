@@ -82,6 +82,7 @@
     <Compile Include="Containers\Container.cs" />
     <Compile Include="DependencyContainerConfig.cs" />
     <Compile Include="DependencyResolvers\DependencyResolver.cs" />
+    <Compile Include="Extensions\ContainerExtensions.cs" />
     <Compile Include="Extensions\LifetimeManagerTypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

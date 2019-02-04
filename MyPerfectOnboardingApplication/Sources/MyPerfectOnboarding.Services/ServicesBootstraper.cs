@@ -11,10 +11,10 @@ namespace MyPerfectOnboarding.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .RegisterType<IPutService, PutService>(Lifetime.PerRequest)
-                .RegisterType<IPostService, PostService>(Lifetime.PerRequest)
-                .RegisterType<IListCache, ListCache>(Lifetime.PerApplication)
-                .RegisterType<IGuidGenerator, GuidGenerator>(Lifetime.PerApplication)
-                .RegisterType<ITimeGenerator, TimeGenerator>(Lifetime.PerApplication);
+                .Register<IPutService, PutService>(Lifetime.PerRequest)
+                .Register<IPostService, PostService>(Lifetime.PerRequest)
+                .Register<IListCache, ListCache>(Lifetime.PerApplication)
+                .Register<IGuidGenerator, GuidGenerator>(Lifetime.PerApplication)
+                .Register<ITimeGenerator, TimeGenerator>(Lifetime.PerApplication);
     }
 }

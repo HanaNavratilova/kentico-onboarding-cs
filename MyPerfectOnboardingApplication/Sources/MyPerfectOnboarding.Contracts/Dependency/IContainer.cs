@@ -4,12 +4,10 @@ namespace MyPerfectOnboarding.Contracts.Dependency
 {
     public interface IContainer : IDisposable
     {
-       IContainer RegisterBootstraper<TBootstraper>() where TBootstraper: IBootstraper, new();
+        IContainer Register<TIType>(TIType instance);
 
-        IContainer RegisterInstance<TIType>(TIType instance);
+        IContainer Register<TIType, TType>(Lifetime lifetime) where TType : TIType;
 
-        IContainer RegisterType<TIType, TType>(Lifetime lifetime) where TType : TIType;
-
-        IContainer RegisterType<TType>(Func<TType> creatingFunction, Lifetime lifetime);
+        IContainer Register<TType>(Func<TType> creatingFunction, Lifetime lifetime);
     }
 }
