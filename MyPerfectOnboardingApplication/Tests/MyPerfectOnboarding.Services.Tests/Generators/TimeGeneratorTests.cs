@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Services.Generators;
+using NSubstitute.Core;
 using NUnit.Framework;
 
 namespace MyPerfectOnboarding.Services.Tests.Generators
@@ -29,6 +31,28 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
 
             var countedLengthOfSleep = time2 - time1;
             Assert.That(countedLengthOfSleep, Is.EqualTo(lengthOfSleep).Within(milliseconds/2).Milliseconds);
+        }
+
+        [Test]
+        public void GetCurrentTime_FollowingTimeIsBiggerThanPreviousOne()
+        {
+            const int numberOfGeneratedTimes = 20;
+            var listOfTimes = Enumerable
+                .Repeat<Func<DateTime>>(_timeGenerator.GetCurrentTime, numberOfGeneratedTimes)
+                .Select(generator =>
+                {
+                    Thread.Sleep(10);
+                    return generator();
+                })
+                .ToArray();
+
+            var setOfTimes = listOfTimes.ToHashSet();
+
+            
+            Assert.Multiple(() => {
+                Assert.That(listOfTimes.Count, Is.EqualTo(setOfTimes.Count));
+                Assert.That(listOfTimes, Is.Ordered.Ascending);
+            });
         }
 
         [Test]
