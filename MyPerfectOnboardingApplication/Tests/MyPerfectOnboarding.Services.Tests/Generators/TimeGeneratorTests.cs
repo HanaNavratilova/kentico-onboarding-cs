@@ -26,7 +26,7 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
             Thread.Sleep(lenfthOfSleep);
             var time2 = _timeGenerator.GetCurrentTime();
 
-            Assert.That(time2 - time1, Is.EqualTo(lenfthOfSleep).Within(milliseconds/10).Milliseconds);
+            Assert.That(time2 - time1, Is.EqualTo(lenfthOfSleep).Within(milliseconds/2).Milliseconds);
         }
 
         [Test]
