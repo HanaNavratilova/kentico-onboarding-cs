@@ -3,7 +3,7 @@ using Unity.Lifetime;
 
 namespace MyPerfectOnboarding.Dependency.Extensions
 {
-    internal static class LifetimeManagerTypeExtensions
+    internal static class LifetimeExtensions
     {
         public static LifetimeManager CreateLifetimeManager(this Lifetime lifetimeManagerType)
         {
