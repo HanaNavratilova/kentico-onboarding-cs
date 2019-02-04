@@ -4,6 +4,7 @@ using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Services;
+using MyPerfectOnboarding.Tests.Utils.Comparers;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -45,13 +46,20 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _timeGenerator.GetCurrentTime().Returns(time, DateTime.MinValue);
             _guidGenerator.Generate().Returns(id);
             _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null, new ListItem());
+            var expectedItem = new ListItem
+            {
+                Id = id,
+                Text = "aaaaa",
+                IsActive = false,
+                CreationTime = time,
+                LastUpdateTime = time
+            };
 
-            
-            var result = await _additionService.AddItemAsync(item);
+            await _additionService.AddItemAsync(item);
 
             _guidGenerator.Received(3).Generate();
-            await _listCache.Received(1).AddItemAsync(item); //-ish
-            //await _listCache.Received(1).AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
+            //await _listCache.Received(1).AddItemAsync(item); //-ish
+            await _listCache.Received(1).AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
             //Assert.That(result, Is.EqualTo(item));
         }
     }

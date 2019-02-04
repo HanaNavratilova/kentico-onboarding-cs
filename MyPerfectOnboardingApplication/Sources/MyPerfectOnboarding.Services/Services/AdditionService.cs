@@ -21,17 +21,21 @@ namespace MyPerfectOnboarding.Services.Services
 
         public async Task<ListItem> AddItemAsync(ListItem item)
         {
-            await MakeItemCompleted(item);
-            return await _cache.AddItemAsync(item);
+            var newItem = await MakeItemCompleted(item);
+            return await _cache.AddItemAsync(newItem);
         }
 
-        private async Task MakeItemCompleted(ListItem item)
+        private async Task<ListItem> MakeItemCompleted(ListItem item)
         {
-            item.Id = await GetIdAsync();
-            item.IsActive = false;
             var time = _timeGenerator.GetCurrentTime();
-            item.CreationTime = time;
-            item.LastUpdateTime = time;
+            return new ListItem()
+            {
+                Id = await GetIdAsync(),
+                Text = item.Text,
+                IsActive = false,
+                CreationTime = time,
+                LastUpdateTime = time,
+            };
         }
 
         private async Task<Guid> GetIdAsync()
