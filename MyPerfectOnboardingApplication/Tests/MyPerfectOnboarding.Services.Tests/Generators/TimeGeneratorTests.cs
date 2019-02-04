@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Services.Tests.Generators
 {
     [TestFixture]
-    class TimeGeneratorTests
+    internal class TimeGeneratorTests
     {
         private ITimeGenerator _timeGenerator;
 

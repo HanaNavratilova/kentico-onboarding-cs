@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Services.Tests.Services
 {
     [TestFixture]
-    class ListCacheTests
+    internal class ListCacheTests
     {
         private readonly ListItem[] _items =
         {

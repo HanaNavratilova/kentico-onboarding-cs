@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Services.Tests.Services
 {
     [TestFixture]
-    class EditingServiceTests
+    internal class EditingServiceTests
     {
         private IListCache _listCache;
         private ITimeGenerator _timeGenerator;

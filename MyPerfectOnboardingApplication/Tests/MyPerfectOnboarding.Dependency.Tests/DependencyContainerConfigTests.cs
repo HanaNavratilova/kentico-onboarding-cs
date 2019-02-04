@@ -12,7 +12,7 @@ using Unity;
 namespace MyPerfectOnboarding.Dependency.Tests
 {
     [TestFixture]
-    class DependencyContainerConfigTests
+    internal class DependencyContainerConfigTests
     {
         private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {

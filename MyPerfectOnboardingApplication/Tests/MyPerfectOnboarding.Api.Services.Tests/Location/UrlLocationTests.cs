@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace MyPerfectOnboarding.Api.Services.Tests.Location
 {
     [TestFixture]
-    public class UrlLocationTests
+    internal class UrlLocationTests
     {
         [Test]
         public void GetListItemLocation_ItemId_ReturnsCorrectlyCreatedLocation()
