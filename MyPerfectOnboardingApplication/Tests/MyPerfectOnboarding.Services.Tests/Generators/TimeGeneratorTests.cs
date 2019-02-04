@@ -21,14 +21,28 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
         public void GetCurrentTime_ReturnsTime()
         {
             const int milliseconds = 52;
+            TimeSpan lenfthOfSleep = TimeSpan.FromMilliseconds(milliseconds);
             var time1 = _timeGenerator.GetCurrentTime();
-            Thread.Sleep(milliseconds);
+            Thread.Sleep(lenfthOfSleep);
             var time2 = _timeGenerator.GetCurrentTime();
 
-            var millisecondsAccuracy = milliseconds / 2;
-            var accuracy = new TimeSpan(0, 0, 0, 0, millisecondsAccuracy);
+            Assert.That(time2 - time1, Is.EqualTo(lenfthOfSleep).Within(milliseconds/10).Milliseconds);
+        }
 
-            Assert.That(time1.AddMilliseconds(milliseconds), Is.EqualTo(time2).Within(accuracy));
+        [Test]
+        public void GetCurrentTime_NotReturnsMinTime()
+        {
+            var time = _timeGenerator.GetCurrentTime();
+
+            Assert.That(time, Is.Not.EqualTo(DateTime.MinValue));
+        }
+
+        [Test]
+        public void GetCurrentTime_NotReturnsMaxTime()
+        {
+            var time = _timeGenerator.GetCurrentTime();
+
+            Assert.That(time, Is.Not.EqualTo(DateTime.MaxValue));
         }
     }
 }

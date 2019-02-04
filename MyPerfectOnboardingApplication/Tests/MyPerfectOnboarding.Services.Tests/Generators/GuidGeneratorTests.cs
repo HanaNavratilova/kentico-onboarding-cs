@@ -29,5 +29,13 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
 
             Assert.That(listOfIds.Count, Is.EqualTo(setOfIds.Count));
         }
+
+        [Test]
+        public void Generate_ReturnsNonemptyGuid()
+        {
+            var guid = _guidGenerator.Generate();
+
+            Assert.That(guid, Is.Not.EqualTo(Guid.Empty));
+        }
     }
 }
