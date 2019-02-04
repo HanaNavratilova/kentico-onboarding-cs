@@ -11,12 +11,14 @@ namespace MyPerfectOnboarding.Database.Repository
     {
         private readonly IMongoCollection<ListItem> _collection;
 
+        private const string NameOfDBCollection = "items";
+
         public ListRepository(IConnectionDetails connectionDetails)
         {
             var url = MongoUrl.Create(connectionDetails.DataConnectionString);
             var client = new MongoClient(url);
             var db = client.GetDatabase(url.DatabaseName);
-            _collection = db.GetCollection<ListItem>("items");
+            _collection = db.GetCollection<ListItem>(NameOfDBCollection);
         }
 
         public async Task<ListItem> AddItemAsync(ListItem item)
