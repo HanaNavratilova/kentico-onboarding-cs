@@ -21,12 +21,14 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
         public void GetCurrentTime_ReturnsTime()
         {
             const int milliseconds = 52;
-            TimeSpan lenfthOfSleep = TimeSpan.FromMilliseconds(milliseconds);
+            var lengthOfSleep = TimeSpan.FromMilliseconds(milliseconds);
+
             var time1 = _timeGenerator.GetCurrentTime();
-            Thread.Sleep(lenfthOfSleep);
+            Thread.Sleep(lengthOfSleep);
             var time2 = _timeGenerator.GetCurrentTime();
 
-            Assert.That(time2 - time1, Is.EqualTo(lenfthOfSleep).Within(milliseconds/2).Milliseconds);
+            var countedLengthOfSleep = time2 - time1;
+            Assert.That(countedLengthOfSleep, Is.EqualTo(lengthOfSleep).Within(milliseconds/2).Milliseconds);
         }
 
         [Test]
