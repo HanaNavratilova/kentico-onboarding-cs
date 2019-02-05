@@ -30,7 +30,7 @@ namespace MyPerfectOnboarding.Database.Repository
         public async Task<ListItem> DeleteItemAsync(Guid id)
             => await _collection.FindOneAndDeleteAsync(item => item.Id == id);
 
-        public async Task ReplaceItemAsync(ListItem editedItem)
+        public async Task<ListItem> ReplaceItemAsync(ListItem editedItem)
             => await _collection.FindOneAndReplaceAsync(item => item.Id == editedItem.Id, editedItem);
 
         public async Task<IEnumerable<ListItem>> GetAllItemsAsync()

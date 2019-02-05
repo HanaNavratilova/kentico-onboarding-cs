@@ -11,7 +11,7 @@ namespace MyPerfectOnboarding.Contracts.Database
 
         Task<ListItem> DeleteItemAsync(Guid id);
 
-        Task ReplaceItemAsync(ListItem editedItem);
+        Task<ListItem> ReplaceItemAsync(ListItem editedItem);
 
         Task<IEnumerable<ListItem>> GetAllItemsAsync();
 
