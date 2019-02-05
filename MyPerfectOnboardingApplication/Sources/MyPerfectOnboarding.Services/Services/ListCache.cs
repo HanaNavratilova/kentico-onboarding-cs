@@ -33,7 +33,9 @@ namespace MyPerfectOnboarding.Services.Services
             => await ExecuteFunctionAsync(async () =>
             {
                 if (!ExistsItemWithId(id))
-                    return null;
+                {
+                    throw new ArgumentNullException();
+                }
 
                 Items.TryRemove(id, out _);
 
@@ -44,11 +46,13 @@ namespace MyPerfectOnboarding.Services.Services
             => await ExecuteFunctionAsync(async () =>
             {
                 if (!ExistsItemWithId(item.Id))
-                    return;
+                {
+                    throw new ArgumentNullException();
+                }
 
                 Items.TryGetValue(item.Id, out var oldItem);
                 Items.TryUpdate(item.Id, item, oldItem);
-                await _listRepository.ReplaceItemAsync(item);
+                return await _listRepository.ReplaceItemAsync(item);
             });
 
         public async Task<IEnumerable<ListItem>> GetAllItemsAsync()
@@ -59,7 +63,7 @@ namespace MyPerfectOnboarding.Services.Services
             {
                 if (!ExistsItemWithId(id))
                 {
-                    return null;
+                    throw new ArgumentNullException();
                 }
 
                 Items.TryGetValue(id, out var item);
@@ -93,13 +97,12 @@ namespace MyPerfectOnboarding.Services.Services
         public async Task<bool> ExistsItemWithIdAsync(Guid id)
             => await ExecuteFunction(() => ExistsItemWithId(id));
 
-        private async Task TryInitializeItemsAsync()
+        internal async Task TryInitializeItemsAsync()
         {
             if (!_isInitialized)
             {
                 _isInitialized = true;
                 var items = await _listRepository.GetAllItemsAsync();
-                //foreach?
                 Items = new ConcurrentDictionary<Guid, ListItem>(items.ToDictionary(item => item.Id, item => item));
             }
         }
