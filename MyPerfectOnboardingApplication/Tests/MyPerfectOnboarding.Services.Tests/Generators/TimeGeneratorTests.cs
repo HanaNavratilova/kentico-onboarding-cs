@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Services.Generators;
-using NSubstitute.Core;
 using NUnit.Framework;
 
 namespace MyPerfectOnboarding.Services.Tests.Generators
