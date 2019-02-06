@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Contracts.Services.Location;
@@ -39,20 +40,21 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var item = await _cache.GetItemAsync(id);
-            if (item == null)
+            if (!await _cache.ExistsItemWithIdAsync(id))
             {
                 return NotFound();
             }
 
+            var item = await _cache.GetItemAsync(id);
+
             return Ok(item);
         }
 
-        public async Task<IHttpActionResult> PostAsync(ListItem item)
+        public async Task<IHttpActionResult> PostAsync(ListItemViewModel item)
         {
             if (item == null)
             {
-                ModelState.AddModelError(nameof(ListItem), "Should not be null.");
+                ModelState.AddModelError(nameof(IListItem), "Should not be null.");
                 return BadRequest(ModelState);
             }
 
@@ -70,11 +72,11 @@ namespace MyPerfectOnboarding.Api.Controllers
         }
 
         [Route("{id}")]
-        public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
+        public async Task<IHttpActionResult> PutAsync(Guid id, ListItemViewModel editedItem)
         {
             if (editedItem == null)
             {
-                ModelState.AddModelError(nameof(ListItem), "Should not be null.");
+                ModelState.AddModelError(nameof(IListItem), "Should not be null.");
                 return BadRequest(ModelState);
             }
 
@@ -90,7 +92,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return await PostAsync(editedItem);
             }
 
-            await _editingService.ReplaceItemAsync(editedItem);
+            await _editingService.ReplaceItemAsync(id, editedItem);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -129,7 +131,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         {
             if ((IsIdEmptyGuid(id) && !shouldBeEmpty) || (!IsIdEmptyGuid(id) && shouldBeEmpty))
             {
-                ModelState.AddModelError(nameof(ListItem.Id), errorMessage);
+                ModelState.AddModelError(nameof(IListItem.Id), errorMessage);
             }
         }
 
@@ -137,18 +139,18 @@ namespace MyPerfectOnboarding.Api.Controllers
         {
             if (string.IsNullOrEmpty(text))
             {
-                ModelState.AddModelError(nameof(ListItem.Text), "Text was empty.");
+                ModelState.AddModelError(nameof(IListItem.Text), "Text was empty.");
             }
         }
 
-        private void ValidateBeforeEditing(Guid id, ListItem item)
+        private void ValidateBeforeEditing(Guid id, ListItemViewModel item)
         {
             ValidateText(item.Text);
 
-            ValidateTime(item.CreationTime, nameof(ListItem.CreationTime),
+            ValidateTime(item.CreationTime, nameof(IListItem.CreationTime),
                 "Creation time should be DateTime.MinValue.");
 
-            ValidateTime(item.LastUpdateTime, nameof(ListItem.LastUpdateTime),
+            ValidateTime(item.LastUpdateTime, nameof(IListItem.LastUpdateTime),
                 "Last update time should be DateTime.MinValue.");
 
             ValidateId(item.Id, "Id is invalid.", shouldBeEmpty: true);
@@ -157,14 +159,14 @@ namespace MyPerfectOnboarding.Api.Controllers
 
         }
 
-        private void ValidateBeforeAddition(ListItem item)
+        private void ValidateBeforeAddition(ListItemViewModel item)
         {
             ValidateText(item.Text);
 
-            ValidateTime(item.CreationTime, nameof(ListItem.CreationTime),
+            ValidateTime(item.CreationTime, nameof(IListItem.CreationTime),
                 "Creation time should be DateTime.MinValue.");
 
-            ValidateTime(item.LastUpdateTime, nameof(ListItem.LastUpdateTime),
+            ValidateTime(item.LastUpdateTime, nameof(IListItem.LastUpdateTime),
                 "Last update time should be DateTime.MinValue.");
 
             ValidateId(item.Id, "Id should be Guid.Empty.", shouldBeEmpty: true);

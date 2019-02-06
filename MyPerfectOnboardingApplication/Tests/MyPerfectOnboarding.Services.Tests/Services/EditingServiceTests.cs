@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
@@ -30,7 +31,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         public async Task ReplaceItemAsync_item_CallsUpdateItem()
         {
             var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var item = new ListItem
+            var item = new ListItemViewModel
             {
                 Id = id,
                 Text = "aaaaa",
@@ -39,7 +40,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
                 LastUpdateTime = new DateTime(1589, 12, 3)
             };
             
-            var editedItem = new ListItem
+            var editedItem = new ListItemViewModel
             {
                 Id = id,
                 Text = "newText",
@@ -50,7 +51,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
 
             var updateTime = new DateTime(1896, 4, 7);
 
-            var expectedItem = new ListItem
+            var expectedItem = new ListItemViewModel
             {
                 Id = item.Id,
                 Text = editedItem.Text,
@@ -62,9 +63,9 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listCache.GetItemAsync(id).Returns(item);
             _timeGenerator.GetCurrentTime().Returns(updateTime, DateTime.MinValue);
 
-            await _editingService.ReplaceItemAsync(editedItem);
+            await _editingService.ReplaceItemAsync(id, editedItem);
 
-            await _listCache.Received(1).ReplaceItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
+            await _listCache.Received(1).ReplaceItemAsync(Arg.Is<IListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
         }
     }
 }

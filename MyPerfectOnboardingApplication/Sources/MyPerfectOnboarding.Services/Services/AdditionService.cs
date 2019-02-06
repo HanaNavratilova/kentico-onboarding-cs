@@ -19,29 +19,28 @@ namespace MyPerfectOnboarding.Services.Services
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<ListItem> AddItemAsync(ListItem item)
+        public async Task<IListItem> AddItemAsync(IListItem item)
         {
             var newItem = await MakeItemCompleted(item);
-            return await _cache.AddItemAsync(newItem);
+            var listItem = new ListItemBuilder().BuildItem(newItem);
+
+            return await _cache.AddItemAsync(listItem);
         }
 
-        private async Task<ListItem> MakeItemCompleted(ListItem item)
+        private async Task<ListItem> MakeItemCompleted(IListItem incompleteItem)
         {
             var time = _timeGenerator.GetCurrentTime();
-            return new ListItem()
-            {
-                Id = await GetIdAsync(),
-                Text = item.Text,
-                IsActive = false,
-                CreationTime = time,
-                LastUpdateTime = time,
-            };
+            return new ListItem(incompleteItem)
+                .With(item => item.Id, await GetIdAsync())
+                .With(item => item.IsActive, false)
+                .With(item => item.CreationTime, time)
+                .With(item => item.LastUpdateTime, time);
         }
 
         private async Task<Guid> GetIdAsync()
         {
             var id = _guidGenerator.Generate();
-            while (await _cache.GetItemAsync(id) != null)
+            while (await _cache.ExistsItemWithIdAsync(id))
             {
                 id = _guidGenerator.Generate();
             }

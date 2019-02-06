@@ -12,7 +12,7 @@ namespace MyPerfectOnboarding.Services.Services
     internal class ListCache : IListCache
     {
         private readonly IListRepository _listRepository;
-        internal ConcurrentDictionary<Guid, ListItem> Items = new ConcurrentDictionary<Guid, ListItem>();
+        internal ConcurrentDictionary<Guid, IListItem> Items = new ConcurrentDictionary<Guid, IListItem>();
         private bool _isInitialized;
 
         public ListCache(IListRepository listRepository)
@@ -20,7 +20,7 @@ namespace MyPerfectOnboarding.Services.Services
             _listRepository = listRepository;
         }
 
-        public async Task<ListItem> AddItemAsync(ListItem item)
+        public async Task<IListItem> AddItemAsync(IListItem item)
             => await ExecuteFunctionAsync(async () =>
             {
                 Items.TryAdd(item.Id, item);
@@ -29,7 +29,7 @@ namespace MyPerfectOnboarding.Services.Services
                 return await _listRepository.AddItemAsync(item);
             });
 
-        public async Task<ListItem> DeleteItemAsync(Guid id)
+        public async Task<IListItem> DeleteItemAsync(Guid id)
             => await ExecuteFunctionAsync(async () =>
             {
                 if (!ExistsItemWithId(id))
@@ -42,7 +42,7 @@ namespace MyPerfectOnboarding.Services.Services
                 return await _listRepository.DeleteItemAsync(id);
             });
 
-        public async Task ReplaceItemAsync(ListItem item)
+        public async Task ReplaceItemAsync(IListItem item)
             => await ExecuteFunctionAsync(async () =>
             {
                 if (!ExistsItemWithId(item.Id))
@@ -55,10 +55,10 @@ namespace MyPerfectOnboarding.Services.Services
                 return await _listRepository.ReplaceItemAsync(item);
             });
 
-        public async Task<IEnumerable<ListItem>> GetAllItemsAsync()
+        public async Task<IEnumerable<IListItem>> GetAllItemsAsync()
             => await ExecuteFunction(() => Items.Values);
 
-        public async Task<ListItem> GetItemAsync(Guid id)
+        public async Task<IListItem> GetItemAsync(Guid id)
             => await ExecuteFunction(() =>
             {
                 if (!ExistsItemWithId(id))
@@ -103,7 +103,7 @@ namespace MyPerfectOnboarding.Services.Services
             {
                 _isInitialized = true;
                 var items = await _listRepository.GetAllItemsAsync();
-                Items = new ConcurrentDictionary<Guid, ListItem>(items.ToDictionary(item => item.Id, item => item));
+                Items = new ConcurrentDictionary<Guid, IListItem>(items.ToDictionary(item => item.Id, item => item));
             }
         }
     }

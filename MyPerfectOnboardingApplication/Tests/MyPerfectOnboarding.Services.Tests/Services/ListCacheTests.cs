@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Services.Services;
@@ -11,9 +12,9 @@ namespace MyPerfectOnboarding.Services.Tests.Services
     [TestFixture]
     internal class ListCacheTests
     {
-        private readonly ListItem[] _items =
+        private readonly IListItem[] _items =
         {
-            new ListItem
+            new ListItemViewModel
             {
                 Id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC"),
                 Text = "aaaaa",
@@ -21,7 +22,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
                 CreationTime = new DateTime(1589, 12, 3),
                 LastUpdateTime = new DateTime(1896, 4, 7)
             },
-            new ListItem
+            new ListItemViewModel
             {
                 Id = new Guid("11AC59B7-9517-4EDD-9DDD-EB418A7C1644"),
                 Text = "dfads",
@@ -48,7 +49,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         public async Task AddItemAsync_item_AddItemIntoRepository()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            var newItem = new ListItem{Id = id, Text = "newItem"};
+            var newItem = new ListItemViewModel { Id = id, Text = "newItem"};
             _listRepository.AddItemAsync(newItem).Returns(newItem);
 
             var addedItem = await _listCache.AddItemAsync(newItem);
@@ -94,7 +95,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public async Task ReplaceItemAsync_item_ReplaceItemInRepository()
         {
-            var item = new ListItem
+            var item = new ListItemViewModel
             {
                 Id = _items[0].Id,
                 Text = "bbbbb",
@@ -117,12 +118,12 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         public void ReplaceItemAsync_NonexistentItem_ThrowsException()
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            var item = new ListItem { Id = id };
+            var item = new ListItemViewModel { Id = id };
 
             Assert.Multiple(async () => {
                 Assert.ThrowsAsync<ArgumentNullException>(async () => await _listCache.ReplaceItemAsync(item));
                 await _listRepository.Received(1).GetAllItemsAsync();
-                await _listRepository.DidNotReceive().ReplaceItemAsync(Arg.Any<ListItem>());
+                await _listRepository.DidNotReceive().ReplaceItemAsync(Arg.Any<IListItem>());
             });
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
@@ -32,7 +33,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         public async Task AddItemAsync_item_AddItemIntoRepo()
         {
             // all properties but Text are supposed to be ignored, hence non-default values that would normally be passed in
-            var item = new ListItem
+            var item = new ListItemViewModel
             {
                 Id = new Guid("D19AC027-B913-4F55-8F21-869A784AEB29"),
                 Text = "aaaaa",
@@ -45,8 +46,8 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             // IMPORTANT: second parameter ;)
             _timeGenerator.GetCurrentTime().Returns(time, DateTime.MinValue);
             _guidGenerator.Generate().Returns(id);
-            _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null, new ListItem());
-            var expectedItem = new ListItem
+            _listCache.ExistsItemWithIdAsync(id).Returns(true, true, false, true);
+            var expectedItem = new ListItemViewModel
             {
                 Id = id,
                 Text = "aaaaa",
@@ -59,7 +60,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
 
             _guidGenerator.Received(3).Generate();
             //await _listCache.Received(1).AddItemAsync(item); //-ish
-            await _listCache.Received(1).AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
+            await _listCache.Received(1).AddItemAsync(Arg.Is<IListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, expectedItem)));
             //Assert.That(result, Is.EqualTo(item));
         }
     }

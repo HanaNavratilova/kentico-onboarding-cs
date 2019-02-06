@@ -7,14 +7,14 @@ namespace MyPerfectOnboarding.Contracts.Database
 {
     public interface IListRepository
     {
-        Task<ListItem> AddItemAsync(ListItem item);
+        Task<IListItem> AddItemAsync(IListItem item);
 
-        Task<ListItem> DeleteItemAsync(Guid id);
+        Task<IListItem> DeleteItemAsync(Guid id);
 
-        Task<ListItem> ReplaceItemAsync(ListItem editedItem);
+        Task<IListItem> ReplaceItemAsync(IListItem editedItem);
 
-        Task<IEnumerable<ListItem>> GetAllItemsAsync();
+        Task<IEnumerable<IListItem>> GetAllItemsAsync();
 
-        Task<ListItem> GetItemAsync(Guid itemId);
+        Task<IListItem> GetItemAsync(Guid itemId);
     }
 }

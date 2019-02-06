@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Dependency\IContainer.cs" />
     <Compile Include="Dependency\Lifetime.cs" />
+    <Compile Include="Models\IListItem.cs" />
+    <Compile Include="Models\ListItem.cs" />
     <Compile Include="Services\Generators\IGuidGenerator.cs" />
     <Compile Include="Services\Generators\ITimeGenerator.cs" />
     <Compile Include="Services\ListItem\IListCache.cs" />
@@ -60,7 +62,6 @@
     <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="IBootstraper.cs" />
-    <Compile Include="Models\ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Location\IUrlLocator.cs" />
   </ItemGroup>
