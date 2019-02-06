@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
     public interface IEditingService
     {
-        Task ReplaceItemAsync(Models.ListItem editedItem);
+        Task ReplaceItemAsync(Guid id, Models.ListItem editedItem);
     }
 }

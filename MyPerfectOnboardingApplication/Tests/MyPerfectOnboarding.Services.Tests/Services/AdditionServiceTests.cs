@@ -4,6 +4,7 @@ using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Services;
+using MyPerfectOnboarding.Tests.Utils.Builders;
 using MyPerfectOnboarding.Tests.Utils.Comparers;
 using NSubstitute;
 using NUnit.Framework;
@@ -32,28 +33,17 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         public async Task AddItemAsync_item_AddItemIntoRepo()
         {
             // all properties but Text are supposed to be ignored, hence non-default values that would normally be passed in
-            var item = new ListItem
-            {
-                Id = new Guid("D19AC027-B913-4F55-8F21-869A784AEB29"),
-                Text = "aaaaa",
-                IsActive = true,
-                CreationTime = new DateTime(1589, 12, 3),
-                LastUpdateTime = new DateTime(1589, 12, 3)
-            };
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var time = new DateTime(2150, 12, 5);
+            var item = ListItemBuilder.CreateItem("D19AC027-B913-4F55-8F21-869A784AEB29", "aaaaa", "1589-12-03");
+            var stringId = "0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC";
+            var stringTime = "2150-12-05";
+            var expectedItem = ListItemBuilder.CreateItem(stringId, "aaaaa", stringTime);
+
+            var id = Guid.Parse(stringId);
+            var time = DateTime.Parse(stringTime);
             // IMPORTANT: second parameter ;)
             _timeGenerator.GetCurrentTime().Returns(time, DateTime.MinValue);
             _guidGenerator.Generate().Returns(id);
-            _listCache.GetItemAsync(id).Returns(new ListItem(), new ListItem(), null, new ListItem());
-            var expectedItem = new ListItem
-            {
-                Id = id,
-                Text = "aaaaa",
-                IsActive = false,
-                CreationTime = time,
-                LastUpdateTime = time
-            };
+            _listCache.ExistsItemWithIdAsync(id).Returns(true, true, false, true);
 
             await _additionService.AddItemAsync(item);
 

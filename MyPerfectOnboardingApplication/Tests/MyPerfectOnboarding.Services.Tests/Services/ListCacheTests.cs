@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Services.Services;
+using MyPerfectOnboarding.Tests.Utils.Builders;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -13,22 +14,8 @@ namespace MyPerfectOnboarding.Services.Tests.Services
     {
         private readonly ListItem[] _items =
         {
-            new ListItem
-            {
-                Id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC"),
-                Text = "aaaaa",
-                IsActive = false,
-                CreationTime = new DateTime(1589, 12, 3),
-                LastUpdateTime = new DateTime(1896, 4, 7)
-            },
-            new ListItem
-            {
-                Id = new Guid("11AC59B7-9517-4EDD-9DDD-EB418A7C1644"),
-                Text = "dfads",
-                IsActive = false,
-                CreationTime = new DateTime(4568, 6, 23),
-                LastUpdateTime = new DateTime(8569, 8, 24)
-            },
+            ListItemBuilder.CreateItem("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC", "aaaaa", "1589-12-03", "1896-04-07"),
+            ListItemBuilder.CreateItem("11AC59B7-9517-4EDD-9DDD-EB418A7C1644", "dfads", "4568-06-23", "8569-08-24")
         };
 
         private ListCache _listCache;
@@ -47,8 +34,9 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public async Task AddItemAsync_item_AddItemIntoRepository()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            var newItem = new ListItem{Id = id, Text = "newItem"};
+            var stringId = "22AC59B7-9517-4EDD-9DDD-EB418A7C1678";
+            var newItem = ListItemBuilder.CreateItem(stringId, "newItem");
+            var id = Guid.Parse(stringId);
             _listRepository.AddItemAsync(newItem).Returns(newItem);
 
             var addedItem = await _listCache.AddItemAsync(newItem);
@@ -94,21 +82,14 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public async Task ReplaceItemAsync_item_ReplaceItemInRepository()
         {
-            var item = new ListItem
-            {
-                Id = _items[0].Id,
-                Text = "bbbbb",
-                CreationTime = _items[0].CreationTime,
-                LastUpdateTime = _items[0].LastUpdateTime,
-                IsActive = _items[0].IsActive,
-            };
+            var editedItem = _items[0].With(item => item.Text, "bbbbb");
             
-            await _listCache.ReplaceItemAsync(item);
+            await _listCache.ReplaceItemAsync(editedItem);
 
             Assert.Multiple(async () => {
                 await _listRepository.Received(1).GetAllItemsAsync();
-                await _listRepository.Received(1).ReplaceItemAsync(item);
-                Assert.That(_listCache.Items, Contains.Value(item));
+                await _listRepository.Received(1).ReplaceItemAsync(editedItem);
+                Assert.That(_listCache.Items, Contains.Value(editedItem));
                 Assert.That(_listCache.Items.Values, Is.Not.Contains(_items[0]));
             });
         }
@@ -116,8 +97,7 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public void ReplaceItemAsync_NonexistentItem_ThrowsException()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
-            var item = new ListItem { Id = id };
+            var item = ListItemBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
 
             Assert.Multiple(async () => {
                 Assert.ThrowsAsync<ArgumentNullException>(async () => await _listCache.ReplaceItemAsync(item));

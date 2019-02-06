@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
@@ -16,19 +17,19 @@ namespace MyPerfectOnboarding.Services.Services
             _timeGenerator = timeGenerator;
         }
 
-        public async Task ReplaceItemAsync(ListItem editedItem)
+        public async Task ReplaceItemAsync(Guid id, ListItem editedItem)
         {
-            var cachedItem = await _cache.GetItemAsync(editedItem.Id);
+            var cachedItem = await _cache.GetItemAsync(id);
 
-            UpdateItem(cachedItem, editedItem);
+            var updatedItem = UpdateItem(cachedItem, editedItem);
 
-            await _cache.ReplaceItemAsync(cachedItem);
+            await _cache.ReplaceItemAsync(updatedItem);
         }
 
-        private void UpdateItem(ListItem itemToUpdate, ListItem editedItem) {
-            itemToUpdate.Text = editedItem.Text;
-            itemToUpdate.IsActive = editedItem.IsActive;
-            itemToUpdate.LastUpdateTime = _timeGenerator.GetCurrentTime();
-        }
+        private ListItem UpdateItem(ListItem itemToUpdate, ListItem editedItem)
+            => itemToUpdate
+                .With(item => item.Text, editedItem.Text)
+                .With(item => item.IsActive, editedItem.IsActive)
+                .With(item => item.LastUpdateTime, _timeGenerator.GetCurrentTime());
     }
 }
