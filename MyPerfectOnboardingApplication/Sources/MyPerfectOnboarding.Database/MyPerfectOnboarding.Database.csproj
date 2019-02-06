@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseBootstraper.cs" />
+    <Compile Include="Models\ListItemModel.cs" />
     <Compile Include="Repository\ListRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

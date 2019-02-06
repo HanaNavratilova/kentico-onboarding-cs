@@ -22,26 +22,26 @@ namespace MyPerfectOnboarding.Services.Services
         public async Task<ListItem> AddItemAsync(ListItem item)
         {
             var newItem = await MakeItemCompleted(item);
+
             return await _cache.AddItemAsync(newItem);
         }
 
-        private async Task<ListItem> MakeItemCompleted(ListItem item)
+        private async Task<ListItem> MakeItemCompleted(ListItem incompleteItem)
         {
+            var id = await GetIdAsync();
             var time = _timeGenerator.GetCurrentTime();
-            return new ListItem()
-            {
-                Id = await GetIdAsync(),
-                Text = item.Text,
-                IsActive = false,
-                CreationTime = time,
-                LastUpdateTime = time,
-            };
+
+            return incompleteItem
+                .With(item => item.Id, id)
+                .With(item => item.IsActive, false)
+                .With(item => item.CreationTime, time)
+                .With(item => item.LastUpdateTime, time);
         }
 
         private async Task<Guid> GetIdAsync()
         {
             var id = _guidGenerator.Generate();
-            while (await _cache.GetItemAsync(id) != null)
+            while (await _cache.ExistsItemWithIdAsync(id))
             {
                 id = _guidGenerator.Generate();
             }

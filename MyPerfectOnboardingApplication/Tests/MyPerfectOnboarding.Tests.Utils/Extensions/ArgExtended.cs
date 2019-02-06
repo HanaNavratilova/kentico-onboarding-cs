@@ -6,7 +6,7 @@ namespace MyPerfectOnboarding.Tests.Utils.Extensions
 {
     public static class ArgExtended
     {
-        public static ListItem IsListItem(ListItem expectedItem)
+        public static ListItem IsListItem(IListItem expectedItem)
             => Arg.Is<ListItem>(acutalItem => ListItemEqualityComparer.Instance.Equals(acutalItem, expectedItem));
     }
 }

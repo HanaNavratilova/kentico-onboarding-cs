@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http.ModelBinding;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
 
 namespace MyPerfectOnboarding.Api.Extensions
@@ -9,7 +10,7 @@ namespace MyPerfectOnboarding.Api.Extensions
         public static ModelStateDictionary ValidateBeforeEditing(
             this ModelStateDictionary modelState,
             Guid requestId,
-            ListItem item)
+            ListItemViewModel item)
             => modelState
                 .ValidateItemExistence(item)
                 .ContinueOnlyWithValid(() => modelState
@@ -21,7 +22,7 @@ namespace MyPerfectOnboarding.Api.Extensions
 
         public static ModelStateDictionary ValidateBeforeAddition(
             this ModelStateDictionary modelState,
-            ListItem item)
+            ListItemViewModel item)
             => modelState
                 .ValidateItemExistence(item)
                 .ContinueOnlyWithValid(() => modelState
@@ -45,7 +46,7 @@ namespace MyPerfectOnboarding.Api.Extensions
         private static bool IsIdEmptyGuid(Guid id)
             => id == Guid.Empty;
 
-        private static ModelStateDictionary ValidateModelId(this ModelStateDictionary modelState, ListItem item)
+        private static ModelStateDictionary ValidateModelId(this ModelStateDictionary modelState, IListItem item)
         {
             if (!IsIdEmptyGuid(item.Id))
             {
@@ -55,7 +56,7 @@ namespace MyPerfectOnboarding.Api.Extensions
             return modelState;
         }
 
-        private static ModelStateDictionary ValidateModelId(this ModelStateDictionary modelState, ListItem item, Guid requestId)
+        private static ModelStateDictionary ValidateModelId(this ModelStateDictionary modelState, IListItem item, Guid requestId)
         {
             if (IsIdEmptyGuid(item.Id))
             {
@@ -75,17 +76,17 @@ namespace MyPerfectOnboarding.Api.Extensions
         }
 
         private static void AddRequestIdDifferentFromModelIdError(this ModelStateDictionary modelState)
-            => modelState.AddModelError(nameof(ListItem.Id),
+            => modelState.AddModelError(nameof(IListItem.Id),
                 "Identifier is invalid. It should be empty. Warning: You have different id in request and in item.");
 
         private static void AddNonemptyModelIdError(this ModelStateDictionary modelState)
-            => modelState.AddModelError(nameof(ListItem.Id), "Identifier is invalid. It should be empty.");
+            => modelState.AddModelError(nameof(IListItem.Id), "Identifier is invalid. It should be empty.");
 
         public static ModelStateDictionary ValidateRequestId(this ModelStateDictionary modelState, Guid id)
         {
             if (IsIdEmptyGuid(id))
             {
-                modelState.AddModelError(nameof(ListItem.Id),
+                modelState.AddModelError(nameof(IListItem.Id),
                     "Identifier in request URI is invalid. It should not be empty.");
             }
 
@@ -111,7 +112,7 @@ namespace MyPerfectOnboarding.Api.Extensions
             DateTime time)
             => modelState.ValidateTime(
                 time,
-                nameof(ListItem.CreationTime),
+                nameof(IListItem.CreationTime),
                 errorMessage: "Creation time should be DateTime.MinValue.");
 
         private static ModelStateDictionary ValidateLastUpdateTime(
@@ -119,24 +120,24 @@ namespace MyPerfectOnboarding.Api.Extensions
             DateTime time)
             => modelState.ValidateTime(
                 time,
-                nameof(ListItem.LastUpdateTime),
+                nameof(IListItem.LastUpdateTime),
                 errorMessage: "Last update time should be DateTime.MinValue.");
 
         private static ModelStateDictionary ValidateText(this ModelStateDictionary modelState, string text)
         {
             if (string.IsNullOrEmpty(text))
             {
-                modelState.AddModelError(nameof(ListItem.Text), "Text was empty.");
+                modelState.AddModelError(nameof(IListItem.Text), "Text was empty.");
             }
 
             return modelState;
         }
 
-        private static ModelStateDictionary ValidateItemExistence(this ModelStateDictionary modelState, ListItem item)
+        private static ModelStateDictionary ValidateItemExistence(this ModelStateDictionary modelState, ListItemViewModel item)
         {
             if (item == null)
             {
-                modelState.AddModelError(nameof(ListItem), "Item should not be null.");
+                modelState.AddModelError(nameof(IListItem), "Item should not be null.");
             }
 
             return modelState;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItems;
 using MyPerfectOnboarding.Services.Services;
+using MyPerfectOnboarding.Tests.Utils.Builders;
 using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,28 +31,11 @@ namespace MyPerfectOnboarding.Services.Tests.Services
         [Test]
         public async Task AddItemAsync_item_AddItemIntoRepo()
         {
-            var item = new ListItem
-            {
-                Id = new Guid("D19AC027-B913-4F55-8F21-869A784AEB29"),
-                Text = "aaaaa",
-                IsActive = true,
-                CreationTime = new DateTime(1589, 12, 3),
-                LastUpdateTime = new DateTime(1589, 12, 3)
-            };
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var time = new DateTime(2150, 12, 5);
-            var expectedItem = new ListItem
-            {
-                Id = id,
-                Text = "aaaaa",
-                IsActive = false,
-                CreationTime = time,
-                LastUpdateTime = time
-            };
-            _timeGenerator.GetCurrentTime().Returns(time, DateTime.MinValue);
+            var item = ListItemBuilder.CreateItem("D19AC027-B913-4F55-8F21-869A784AEB29", "aaaaa", "1589-12-03");
+            var expectedItem = ListItemBuilder.CreateItem("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC", "aaaaa", "2150-12-05");
+            _timeGenerator.GetCurrentTime().Returns(expectedItem.CreationTime, DateTime.MinValue);
             _guidGenerator.Generate().Returns(expectedItem.Id);
-            _listCache.GetItemAsync(expectedItem.Id).Returns(new ListItem(), new ListItem(), null, new ListItem());
-           
+            _listCache.ExistsItemWithIdAsync(expectedItem.Id).Returns(true, true, false, true);
 
             await _additionService.AddItemAsync(item);
 

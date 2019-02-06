@@ -65,6 +65,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\ListItemBuilder.cs" />
+    <Compile Include="Builders\ListItemViewModelBuilder.cs" />
     <Compile Include="Comparers\ListItemEqualityComparer.cs" />
     <Compile Include="Extensions\ApiControllerExtension.cs" />
     <Compile Include="Extensions\ArgExtended.cs" />
@@ -77,6 +79,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Sources\MyPerfectOnboarding.Api\MyPerfectOnboarding.Api.csproj">
+      <Project>{dadc924c-b6b2-48a5-812e-bf94c1b129c1}</Project>
+      <Name>MyPerfectOnboarding.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Sources\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
       <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
       <Name>MyPerfectOnboarding.Contracts</Name>

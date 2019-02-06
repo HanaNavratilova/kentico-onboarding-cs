@@ -30,15 +30,15 @@ namespace MyPerfectOnboarding.Services.Services
                 throw new KeyNotFoundException($"Item with id: {id} was not found.");
             }
 
-            UpdateItem(cachedItem, editedItem);
+            var updatedItem = UpdateItem(cachedItem, editedItem);
 
-            return await _cache.ReplaceItemAsync(cachedItem);
+            return await _cache.ReplaceItemAsync(updatedItem);
         }
 
-        private void UpdateItem(ListItem itemToUpdate, ListItem editedItem) {
-            itemToUpdate.Text = editedItem.Text;
-            itemToUpdate.IsActive = editedItem.IsActive;
-            itemToUpdate.LastUpdateTime = _timeGenerator.GetCurrentTime();
-        }
+        private ListItem UpdateItem(ListItem itemToUpdate, ListItem editedItem)
+            => itemToUpdate
+                .With(item => item.Text, editedItem.Text)
+                .With(item => item.IsActive, editedItem.IsActive)
+                .With(item => item.LastUpdateTime, _timeGenerator.GetCurrentTime());
     }
 }
