@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Generators\GuidGenerator.cs" />
     <Compile Include="Generators\TimeGenerator.cs" />
-    <Compile Include="ListItemBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesBootstraper.cs" />
     <Compile Include="Services\ListCache.cs" />

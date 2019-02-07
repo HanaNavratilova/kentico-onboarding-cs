@@ -22,15 +22,15 @@ namespace MyPerfectOnboarding.Services.Services
             var cachedItem = await _cache.GetItemAsync(id);
 
             var updatedItem = UpdateItem(cachedItem, editedItem);
-            var listItem = new ListItemBuilder().BuildItem(updatedItem);
+            var listItem = updatedItem.Build();
 
             await _cache.ReplaceItemAsync(listItem);
         }
 
         private ListItem UpdateItem(IListItem itemToUpdate, IListItem editedItem)
             => new ListItem(itemToUpdate)
-            .With(item => item.Text, editedItem.Text)
-            .With(item => item.IsActive, editedItem.IsActive)
-            .With(item => item.LastUpdateTime, _timeGenerator.GetCurrentTime());
+                .With(item => item.Text, editedItem.Text)
+                .With(item => item.IsActive, editedItem.IsActive)
+                .With(item => item.LastUpdateTime, _timeGenerator.GetCurrentTime());
     }
 }
