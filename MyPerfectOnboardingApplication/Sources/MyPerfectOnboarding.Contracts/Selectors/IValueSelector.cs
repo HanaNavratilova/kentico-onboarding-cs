@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace MyPerfectOnboarding.Contracts.Selector
+namespace MyPerfectOnboarding.Contracts.Selectors
 {
     public interface IValueSelector<TModel>
     {

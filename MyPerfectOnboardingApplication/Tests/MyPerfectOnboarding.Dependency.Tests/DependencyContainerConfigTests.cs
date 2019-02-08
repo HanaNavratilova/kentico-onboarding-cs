@@ -6,7 +6,7 @@ using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Dependency;
 using MyPerfectOnboarding.Contracts.Models;
-using MyPerfectOnboarding.Contracts.Selector;
+using MyPerfectOnboarding.Contracts.Selectors;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Dependency.Containers;
 using NSubstitute;

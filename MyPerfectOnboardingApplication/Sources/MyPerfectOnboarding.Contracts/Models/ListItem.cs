@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using MyPerfectOnboarding.Contracts.Selector;
+using MyPerfectOnboarding.Contracts.Selectors;
 
 namespace MyPerfectOnboarding.Contracts.Models
 {

@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace MyPerfectOnboarding.Contracts.Selector
+namespace MyPerfectOnboarding.Contracts.Selectors
 {
     internal static class ValueSelector
     {

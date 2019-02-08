@@ -65,9 +65,9 @@
     <Compile Include="IBootstraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Location\IUrlLocator.cs" />
-    <Compile Include="Selector\ExpressionExtensions.cs" />
-    <Compile Include="Selector\IValueSelector.cs" />
-    <Compile Include="Selector\ValueSelector.cs" />
+    <Compile Include="Selectors\ExpressionExtensions.cs" />
+    <Compile Include="Selectors\IValueSelector.cs" />
+    <Compile Include="Selectors\ValueSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
