@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyPerfectOnboarding.Contracts.Models;
 
 namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
