@@ -1,5 +1,4 @@
-﻿using MyPerfectOnboarding.Contracts;
-using MyPerfectOnboarding.Contracts.Dependency;
+﻿using MyPerfectOnboarding.Contracts.Dependency;
 
 namespace MyPerfectOnboarding.Dependency.Extensions
 {

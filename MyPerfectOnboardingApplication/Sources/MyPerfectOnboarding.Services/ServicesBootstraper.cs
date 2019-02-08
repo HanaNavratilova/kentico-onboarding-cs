@@ -1,5 +1,4 @@
-﻿using MyPerfectOnboarding.Contracts;
-using MyPerfectOnboarding.Contracts.Dependency;
+﻿using MyPerfectOnboarding.Contracts.Dependency;
 using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
 using MyPerfectOnboarding.Services.Generators;

@@ -62,7 +62,7 @@
     <Compile Include="Services\ListItem\IEditingService.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
-    <Compile Include="IBootstraper.cs" />
+    <Compile Include="Dependency\IBootstraper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Location\IUrlLocator.cs" />
     <Compile Include="Selectors\ExpressionExtensions.cs" />

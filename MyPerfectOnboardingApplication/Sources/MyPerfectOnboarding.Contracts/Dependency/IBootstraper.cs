@@ -1,6 +1,4 @@
-﻿using MyPerfectOnboarding.Contracts.Dependency;
-
-namespace MyPerfectOnboarding.Contracts
+﻿namespace MyPerfectOnboarding.Contracts.Dependency
 {
     public interface IBootstraper
     {
