@@ -10,8 +10,10 @@ namespace MyPerfectOnboarding.Database
 {
     public class DatabaseBootstraper : IBootstraper
     {
-        public DatabaseBootstraper()
+        static DatabaseBootstraper()
         {
+            // Static constructor is needed because BsonSerilizer can only be set once in application's lifetime
+            // (and nothing prevented this class from being re-instantiated).
             BsonSerializer.RegisterSerializer(new ImpliedImplementationInterfaceSerializer<IListItem, ListItemModel>());
         }
 
