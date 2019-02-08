@@ -10,7 +10,6 @@ using MyPerfectOnboarding.Contracts.Services.Generators;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Dependency;
 using MyPerfectOnboarding.Dependency.Containers;
-using MyPerfectOnboarding.Services.Services;
 using MyPerfectOnboarding.Tests.Utils.Builders;
 using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
