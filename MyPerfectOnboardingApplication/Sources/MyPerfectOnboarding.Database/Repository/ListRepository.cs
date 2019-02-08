@@ -4,8 +4,6 @@ using MyPerfectOnboarding.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
 using MyPerfectOnboarding.Database.Models;
 
 namespace MyPerfectOnboarding.Database.Repository
@@ -18,7 +16,6 @@ namespace MyPerfectOnboarding.Database.Repository
 
         public ListRepository(IConnectionDetails connectionDetails)
         {
-            BsonSerializer.RegisterSerializer(new ImpliedImplementationInterfaceSerializer<IListItem, ListItemModel>());
             var url = MongoUrl.Create(connectionDetails.DataConnectionString);
             var client = new MongoClient(url);
             var db = client.GetDatabase(url.DatabaseName);
