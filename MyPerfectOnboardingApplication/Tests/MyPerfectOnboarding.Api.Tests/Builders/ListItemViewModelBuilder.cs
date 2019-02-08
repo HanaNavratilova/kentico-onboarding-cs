@@ -1,6 +1,5 @@
 ﻿using System;
 using MyPerfectOnboarding.Api.Models;
-using MyPerfectOnboarding.Contracts.Models;
 
 namespace MyPerfectOnboarding.Api.Tests.Builders
 {
