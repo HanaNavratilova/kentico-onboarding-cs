@@ -11,6 +11,7 @@ using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Dependency;
 using MyPerfectOnboarding.Dependency.Containers;
 using MyPerfectOnboarding.Tests.Utils.Builders;
+using MyPerfectOnboarding.Tests.Utils.Comparers;
 using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
 using NUnit.Framework;
@@ -70,7 +71,7 @@ namespace MyPerfectOnboarding.App.Tests
 
             Assert.Multiple(() => {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(resultItems, Is.EqualTo(items));
+                Assert.That(resultItems, Is.EqualTo(items).Using(ListItemEqualityComparer.Instance));
             });
         }
 
