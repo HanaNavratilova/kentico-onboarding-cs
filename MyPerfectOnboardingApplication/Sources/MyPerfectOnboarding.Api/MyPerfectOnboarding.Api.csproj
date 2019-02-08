@@ -110,6 +110,7 @@
     <Compile Include="App_Start\RoutesConfig.cs" />
     <Compile Include="Configuration\ConnectionDetails.cs" />
     <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="Extensions\ListItemExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -149,6 +150,7 @@
       <Name>MyPerfectOnboarding.Dependency</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

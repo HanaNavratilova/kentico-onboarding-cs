@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
+using MyPerfectOnboarding.Api.Extensions;
 using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.ListItem;
@@ -29,7 +30,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         }
 
         public async Task<IHttpActionResult> GetAsync()
-            => Ok(await _cache.GetAllItemsAsync());
+            => Ok(await _cache.GetAllItemsAsync().ToViewModelsAsync());
 
         [Route("{id}", Name = "GetListItem")]
         public async Task<IHttpActionResult> GetAsync(Guid id)
@@ -47,7 +48,7 @@ namespace MyPerfectOnboarding.Api.Controllers
 
             var item = await _cache.GetItemAsync(id);
 
-            return Ok(item);
+            return Ok(item.ToViewModel());
         }
 
         public async Task<IHttpActionResult> PostAsync(ListItemViewModel item)
@@ -68,7 +69,7 @@ namespace MyPerfectOnboarding.Api.Controllers
             var newItem = await _additionService.AddItemAsync(item.AsImmutable());
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
-            return Created(location, newItem);
+            return Created(location, newItem.ToViewModel());
         }
 
         [Route("{id}")]

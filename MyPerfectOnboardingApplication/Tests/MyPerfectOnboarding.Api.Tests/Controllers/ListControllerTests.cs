@@ -58,7 +58,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             Assert.Multiple(() => { 
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(resultItems, Is.EqualTo(items));
+                Assert.That(resultItems, Is.EqualTo(items).Using(ListItemEqualityComparer.Instance));
             });
         }
 
@@ -74,7 +74,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             Assert.Multiple(() => {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(item, Is.EqualTo(expectedItem));
+                Assert.That(item, Is.EqualTo(expectedItem).Using(ListItemEqualityComparer.Instance));
             });
         }
 
@@ -119,7 +119,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
                 Assert.That(message.Headers.Location, Is.EqualTo(expectedUri));
-                Assert.That(item, Is.EqualTo(createdItem));
+                Assert.That(item, Is.EqualTo(createdItem).Using(ListItemEqualityComparer.Instance));
             });
         }
 
@@ -276,7 +276,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.Created));
                 Assert.That(message.Headers.Location, Is.EqualTo(expectedUri));
-                Assert.That(returnedItem, Is.EqualTo(createdItem));
+                Assert.That(returnedItem, Is.EqualTo(createdItem).Using(ListItemEqualityComparer.Instance));
             });
         }
 
