@@ -10,8 +10,9 @@ namespace MyPerfectOnboarding.Database
 {
     public class DatabaseBootstraper : IBootstraper
     {
-        public DatabaseBootstraper()
+        static DatabaseBootstraper()
         {
+            //It's needed because of the tests. They failed cause ctor was called before every test, but the serializer were already registered.
             BsonSerializer.RegisterSerializer(new ImpliedImplementationInterfaceSerializer<IListItem, ListItemModel>());
         }
 
