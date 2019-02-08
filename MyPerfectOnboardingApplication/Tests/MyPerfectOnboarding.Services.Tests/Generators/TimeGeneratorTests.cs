@@ -21,7 +21,7 @@ namespace MyPerfectOnboarding.Services.Tests.Generators
         [Test]
         public void GetCurrentTime_ReturnsTime()
         {
-            const int milliseconds = 52;
+            const int milliseconds = 152;
             var lengthOfSleep = TimeSpan.FromMilliseconds(milliseconds);
 
             var time1 = _timeGenerator.GetCurrentTime();
