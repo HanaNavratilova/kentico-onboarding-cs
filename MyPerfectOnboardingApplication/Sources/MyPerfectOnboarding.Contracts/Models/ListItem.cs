@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using MyPerfectOnboarding.Contracts.Selector;
 
 namespace MyPerfectOnboarding.Contracts.Models
 {
-    public class ListItem
+    public class ListItem : IListItem
     {
-        public ListItem() { }
+        internal ListItem() { }
 
-        public ListItem(IListItem item)
+        public ListItem(IListItem item) 
+            : this()
         {
             Id = item.Id;
             Text = item.Text;
@@ -17,53 +19,38 @@ namespace MyPerfectOnboarding.Contracts.Models
             LastUpdateTime = item.LastUpdateTime;
         }
 
-        public Guid Id { get; private set; }
+        private ListItem(ListItem originalItem, PropertyInfo propertyForNewValue, object newValue)
+            :this()
+        {
+            var valueSelector = ValueSelector.Create(originalItem, propertyForNewValue, newValue);
 
-        public string Text { get; private set; }
+            Id = valueSelector.For(item => item.Id);
+            Text = valueSelector.For(item => item.Text);
+            IsActive = valueSelector.For(item => item.IsActive);
+            CreationTime = valueSelector.For(item => item.CreationTime);
+            LastUpdateTime = valueSelector.For(item => item.LastUpdateTime);
+        }
 
-        public bool IsActive { get; private set; }
+        public Guid Id { get; }
 
-        public DateTime CreationTime { get; private set; }
+        public string Text { get; }
 
-        public DateTime LastUpdateTime { get; private set; }
+        public bool IsActive { get; }
+
+        public DateTime CreationTime { get; }
+
+        public DateTime LastUpdateTime { get; }
 
         public override string ToString() 
             => $"{nameof(Id)}: {Id}, {nameof(Text)}: {Text}, {nameof(IsActive)}: {IsActive}, {nameof(CreationTime)}: {CreationTime}, {nameof(LastUpdateTime)}: {LastUpdateTime}";
 
-        public ListItem With<T>(Expression<Func<ListItem, T>> function, T parameter)
+        public ListItem With<TValue>(Expression<Func<IListItem, TValue>> propertySelector, TValue newPropertyValue)
         {
-            var member = (MemberExpression) function.Body;
-            var propertyInfo = (PropertyInfo)(member).Member;
-            propertyInfo.SetValue(this, parameter);
+            var propertyInfo = propertySelector.ToPropertyInfo();
 
-            return this;
-        }
+            var clone = new ListItem(this, propertyInfo, newPropertyValue);
 
-        public IListItem Build()
-        {
-            return new Item(this);
-        }
-
-        private class Item : IListItem
-        {
-            internal Item(ListItem item)
-            {
-                Id = item.Id;
-                Text = item.Text;
-                IsActive = item.IsActive;
-                CreationTime = item.CreationTime;
-                LastUpdateTime = item.LastUpdateTime;
-            }
-
-            public Guid Id { get; }
-
-            public string Text { get; }
-
-            public bool IsActive { get; }
-
-            public DateTime CreationTime { get; }
-
-            public DateTime LastUpdateTime { get; }
+            return clone;
         }
     }
 }

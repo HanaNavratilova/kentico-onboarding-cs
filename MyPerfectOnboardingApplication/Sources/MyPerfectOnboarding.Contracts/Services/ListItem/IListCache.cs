@@ -7,15 +7,15 @@ namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
     public interface IListCache
     {
-        Task<IListItem> AddItemAsync(IListItem item);
+        Task<Models.ListItem> AddItemAsync(Models.ListItem item);
 
-        Task<IListItem> DeleteItemAsync(Guid id);
+        Task<Models.ListItem> DeleteItemAsync(Guid id);
 
-        Task ReplaceItemAsync(IListItem editedItem);
+        Task ReplaceItemAsync(Models.ListItem editedItem);
 
-        Task<IEnumerable<IListItem>> GetAllItemsAsync();
+        Task<IEnumerable<Models.ListItem>> GetAllItemsAsync();
 
-        Task<IListItem> GetItemAsync(Guid itemId);
+        Task<Models.ListItem> GetItemAsync(Guid itemId);
 
         Task<bool> ExistsItemWithIdAsync(Guid id);
     }

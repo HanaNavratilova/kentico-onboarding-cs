@@ -65,7 +65,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var newItem = await _additionService.AddItemAsync(item);
+            var newItem = await _additionService.AddItemAsync(item.AsImmutable());
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
             return Created(location, newItem);
@@ -92,7 +92,7 @@ namespace MyPerfectOnboarding.Api.Controllers
                 return await PostAsync(editedItem);
             }
 
-            await _editingService.ReplaceItemAsync(id, editedItem);
+            await _editingService.ReplaceItemAsync(id, editedItem.AsImmutable());
 
             return StatusCode(HttpStatusCode.NoContent);
         }

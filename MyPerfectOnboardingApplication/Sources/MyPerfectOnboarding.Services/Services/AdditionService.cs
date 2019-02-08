@@ -19,20 +19,19 @@ namespace MyPerfectOnboarding.Services.Services
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<IListItem> AddItemAsync(IListItem item)
+        public async Task<IListItem> AddItemAsync(ListItem item)
         {
             var newItem = await MakeItemCompleted(item);
-            var listItem = newItem.Build();
 
-            return await _cache.AddItemAsync(listItem);
+            return await _cache.AddItemAsync(newItem);
         }
 
-        private async Task<ListItem> MakeItemCompleted(IListItem incompleteItem)
+        private async Task<ListItem> MakeItemCompleted(ListItem incompleteItem)
         {
             var id = await GetIdAsync();
             var time = _timeGenerator.GetCurrentTime();
 
-            return new ListItem(incompleteItem)
+            return incompleteItem
                 .With(item => item.Id, id)
                 .With(item => item.IsActive, false)
                 .With(item => item.CreationTime, time)

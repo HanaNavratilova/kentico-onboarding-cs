@@ -70,10 +70,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sources\MyPerfectOnboarding.Api\MyPerfectOnboarding.Api.csproj">
-      <Project>{DADC924C-B6B2-48A5-812E-BF94C1B129C1}</Project>
-      <Name>MyPerfectOnboarding.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Sources\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
       <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
       <Name>MyPerfectOnboarding.Contracts</Name>

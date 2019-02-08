@@ -6,6 +6,7 @@ using MyPerfectOnboarding.Contracts;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Dependency;
 using MyPerfectOnboarding.Contracts.Models;
+using MyPerfectOnboarding.Contracts.Selector;
 using MyPerfectOnboarding.Contracts.Services.Location;
 using MyPerfectOnboarding.Dependency.Containers;
 using NSubstitute;
@@ -20,7 +21,8 @@ namespace MyPerfectOnboarding.Dependency.Tests
         private static readonly IEnumerable<Type> TypesNotToRegister = new[]
         {
             typeof(IBootstraper),
-            typeof(IListItem)
+            typeof(IListItem),
+            typeof(IValueSelector<>)
         };
 
         private static readonly IEnumerable<Type> TypesToRegisterExplicitly = new[]

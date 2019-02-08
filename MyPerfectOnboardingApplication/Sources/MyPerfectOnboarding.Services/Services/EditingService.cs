@@ -17,18 +17,17 @@ namespace MyPerfectOnboarding.Services.Services
             _timeGenerator = timeGenerator;
         }
 
-        public async Task ReplaceItemAsync(Guid id, IListItem editedItem)
+        public async Task ReplaceItemAsync(Guid id, ListItem editedItem)
         {
             var cachedItem = await _cache.GetItemAsync(id);
 
             var updatedItem = UpdateItem(cachedItem, editedItem);
-            var listItem = updatedItem.Build();
 
-            await _cache.ReplaceItemAsync(listItem);
+            await _cache.ReplaceItemAsync(updatedItem);
         }
 
-        private ListItem UpdateItem(IListItem itemToUpdate, IListItem editedItem)
-            => new ListItem(itemToUpdate)
+        private ListItem UpdateItem(ListItem itemToUpdate, ListItem editedItem)
+            => itemToUpdate
                 .With(item => item.Text, editedItem.Text)
                 .With(item => item.IsActive, editedItem.IsActive)
                 .With(item => item.LastUpdateTime, _timeGenerator.GetCurrentTime());

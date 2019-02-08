@@ -6,6 +6,6 @@ namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
     public interface IEditingService
     {
-        Task ReplaceItemAsync(Guid id, IListItem editedItem);
+        Task ReplaceItemAsync(Guid id, Models.ListItem editedItem);
     }
 }

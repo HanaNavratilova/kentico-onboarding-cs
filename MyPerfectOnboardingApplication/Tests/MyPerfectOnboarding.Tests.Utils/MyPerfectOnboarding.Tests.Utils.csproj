@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\ListItemBuilder.cs" />
     <Compile Include="Comparers\ListItemEqualityComparer.cs" />
     <Compile Include="Extensions\ApiControllerExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
