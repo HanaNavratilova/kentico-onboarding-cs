@@ -34,7 +34,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}", Name = "GetListItem")]
         public async Task<IHttpActionResult> GetAsync(Guid id)
         {
-            ValidateId(id, "Id is invalid.", shouldBeEmpty:false);
+            ValidateId(id, "Id is invalid. It should not be empty.", shouldBeEmpty:false);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -54,7 +54,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         {
             if (item == null)
             {
-                ModelState.AddModelError(nameof(IListItem), "Should not be null.");
+                ModelState.AddModelError(nameof(IListItem), "Item should not be null.");
                 return BadRequest(ModelState);
             }
 
@@ -76,7 +76,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         {
             if (editedItem == null)
             {
-                ModelState.AddModelError(nameof(IListItem), "Should not be null.");
+                ModelState.AddModelError(nameof(IListItem), "Item should not be null.");
                 return BadRequest(ModelState);
             }
 
@@ -100,7 +100,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
-            ValidateId(id, "Id is invalid.", shouldBeEmpty: false);
+            ValidateId(id, "Id is invalid. It should not be empty.", shouldBeEmpty: false);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -153,9 +153,9 @@ namespace MyPerfectOnboarding.Api.Controllers
             ValidateTime(item.LastUpdateTime, nameof(IListItem.LastUpdateTime),
                 "Last update time should be DateTime.MinValue.");
 
-            ValidateId(item.Id, "Id is invalid.", shouldBeEmpty: true);
+            ValidateId(item.Id, "Item id is invalid. It should be empty.", shouldBeEmpty: true);
 
-            ValidateId(id, "Id is invalid.", shouldBeEmpty: false);
+            ValidateId(id, "Id of request is invalid. It should not be empty.", shouldBeEmpty: false);
 
         }
 
@@ -169,7 +169,7 @@ namespace MyPerfectOnboarding.Api.Controllers
             ValidateTime(item.LastUpdateTime, nameof(IListItem.LastUpdateTime),
                 "Last update time should be DateTime.MinValue.");
 
-            ValidateId(item.Id, "Id should be Guid.Empty.", shouldBeEmpty: true);
+            ValidateId(item.Id, "Item id is invalid. It should be empty.", shouldBeEmpty: true);
         }
     }
 }
