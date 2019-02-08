@@ -5,6 +5,6 @@ namespace MyPerfectOnboarding.Contracts.Services.ListItem
 {
     public interface IAdditionService
     {
-        Task<IListItem> AddItemAsync(Models.ListItem item);
+        Task<Models.ListItem> AddItemAsync(Models.ListItem item);
     }
 }

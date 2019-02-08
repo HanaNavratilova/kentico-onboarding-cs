@@ -19,7 +19,7 @@ namespace MyPerfectOnboarding.Services.Services
             _guidGenerator = guidGenerator;
         }
 
-        public async Task<IListItem> AddItemAsync(ListItem item)
+        public async Task<ListItem> AddItemAsync(ListItem item)
         {
             var newItem = await MakeItemCompleted(item);
 
