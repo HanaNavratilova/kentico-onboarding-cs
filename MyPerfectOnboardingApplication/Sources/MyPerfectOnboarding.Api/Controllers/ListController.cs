@@ -13,8 +13,7 @@ namespace MyPerfectOnboarding.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     [Route("")]
     public class ListController : ApiController
-    {
-        
+    {  
         private readonly IUrlLocator _urlLocation;
         private readonly IAdditionService _additionService;
         private readonly IEditingService _editingService;
@@ -34,15 +33,36 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}", Name = "GetListItem")]
         public async Task<IHttpActionResult> GetAsync(Guid id)
         {
+            ValidateId(id, "Id is invalid. It should not be empty.", shouldBeEmpty:false);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var item = await _cache.GetItemAsync(id);
             if (item == null)
+            {
                 return NotFound();
+            }
 
             return Ok(item);
         }
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
+            if (item == null)
+            {
+                ModelState.AddModelError(nameof(ListItem), "Item should not be null.");
+                return BadRequest(ModelState);
+            }
+
+            ValidateBeforeAddition(item);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var newItem = await _additionService.AddItemAsync(item);
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
@@ -52,6 +72,24 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
+            if (editedItem == null)
+            {
+                ModelState.AddModelError(nameof(ListItem), "Item should not be null.");
+                return BadRequest(ModelState);
+            }
+
+            ValidateBeforeEditing(id, editedItem);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return await PostAsync(editedItem);
+            }
+
             await _editingService.ReplaceItemAsync(editedItem);
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -60,9 +98,76 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
+            ValidateId(id, "Id is invalid. It should not be empty.", shouldBeEmpty: false);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return NotFound();
+            }
+
             await _cache.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        private static bool IsIdEmptyGuid(Guid id) 
+            => id == Guid.Empty;
+
+        private void ValidateTime(DateTime time, string name, string errorMessage)
+        {
+            if (time != DateTime.MinValue)
+            {
+                ModelState.AddModelError(name, errorMessage);
+            }
+        }
+
+        private void ValidateId(Guid id, string errorMessage, bool shouldBeEmpty)
+        {
+            if ((IsIdEmptyGuid(id) && !shouldBeEmpty) || (!IsIdEmptyGuid(id) && shouldBeEmpty))
+            {
+                ModelState.AddModelError(nameof(ListItem.Id), errorMessage);
+            }
+        }
+
+        private void ValidateText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                ModelState.AddModelError(nameof(ListItem.Text), "Text was empty.");
+            }
+        }
+
+        private void ValidateBeforeEditing(Guid id, ListItem item)
+        {
+            ValidateText(item.Text);
+
+            ValidateTime(item.CreationTime, nameof(ListItem.CreationTime),
+                "Creation time should be DateTime.MinValue.");
+
+            ValidateTime(item.LastUpdateTime, nameof(ListItem.LastUpdateTime),
+                "Last update time should be DateTime.MinValue.");
+
+            ValidateId(item.Id, "Item id is invalid. It should be empty.", shouldBeEmpty: true);
+
+            ValidateId(id, "Id of request is invalid. It should not be empty.", shouldBeEmpty: false);
+
+        }
+
+        private void ValidateBeforeAddition(ListItem item)
+        {
+            ValidateText(item.Text);
+
+            ValidateTime(item.CreationTime, nameof(ListItem.CreationTime),
+                "Creation time should be DateTime.MinValue.");
+
+            ValidateTime(item.LastUpdateTime, nameof(ListItem.LastUpdateTime),
+                "Last update time should be DateTime.MinValue.");
+
+            ValidateId(item.Id, "Item id is invalid. It should be empty.", shouldBeEmpty: true);
         }
     }
 }
