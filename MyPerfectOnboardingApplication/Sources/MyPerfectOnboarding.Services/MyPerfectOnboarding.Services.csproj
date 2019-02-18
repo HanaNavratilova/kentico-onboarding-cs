@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F9D88A7D-64F2-42F4-8E6D-EBF7222EFBFA}</ProjectGuid>
+    <ProjectGuid>{A71D8173-234F-48D3-8161-6228269B255B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyPerfectOnboarding.Contracts</RootNamespace>
-    <AssemblyName>MyPerfectOnboarding.Contracts</AssemblyName>
+    <RootNamespace>MyPerfectOnboarding.Services</RootNamespace>
+    <AssemblyName>MyPerfectOnboarding.Services</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,15 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Configuration.ConfigurationManager.4.4.1\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,21 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dependency\IContainer.cs" />
-    <Compile Include="Dependency\Lifetime.cs" />
-    <Compile Include="Services\Generators\IGuidGenerator.cs" />
-    <Compile Include="Services\Generators\ITimeGenerator.cs" />
-    <Compile Include="Database\IConnectionDetails.cs" />
-    <Compile Include="Services\Location\IControllersRouteNames.cs" />
-    <Compile Include="Database\IListRepository.cs" />
-    <Compile Include="Dependency\IBootstraper.cs" />
-    <Compile Include="Models\ListItem.cs" />
+    <Compile Include="Generators\GuidGenerator.cs" />
+    <Compile Include="Generators\TimeGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Location\IUrlLocator.cs" />
+    <Compile Include="ServicesBootstraper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">
+      <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
+      <Name>MyPerfectOnboarding.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

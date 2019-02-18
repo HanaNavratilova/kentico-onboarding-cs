@@ -7,6 +7,7 @@ using MyPerfectOnboarding.Database;
 using MyPerfectOnboarding.Dependency.Containers;
 using MyPerfectOnboarding.Dependency.DependencyResolvers;
 using MyPerfectOnboarding.Dependency.Extensions;
+using MyPerfectOnboarding.Services;
 using Unity;
 
 namespace MyPerfectOnboarding.Dependency
@@ -31,6 +32,7 @@ namespace MyPerfectOnboarding.Dependency
             => container
                 .RegisterBootstraper<DatabaseBootstraper>()
                 .RegisterBootstraper<ApiServicesBootstraper>()
+                .RegisterBootstraper<ServicesBootstraper>()
                 .Register(_connectionDetails)
                 .Register(_routeNames)
                 .Register(container);
