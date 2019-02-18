@@ -48,6 +48,7 @@
     <Compile Include="Services\CachedItemsProvider.cs" />
     <Compile Include="Services\Extensions\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Services\ListCache.cs" />
+    <Compile Include="Services\AdditionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">

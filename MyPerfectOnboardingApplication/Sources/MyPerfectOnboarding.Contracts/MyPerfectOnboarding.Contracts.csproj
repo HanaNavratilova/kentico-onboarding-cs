@@ -56,6 +56,7 @@
     <Compile Include="Database\IConnectionDetails.cs" />
     <Compile Include="Services\ListItems\ICachedItemsProvider.cs" />
     <Compile Include="Services\ListItems\IListCache.cs" />
+    <Compile Include="Services\ListItems\IAdditionService.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />
     <Compile Include="Database\IListRepository.cs" />
     <Compile Include="Dependency\IBootstraper.cs" />

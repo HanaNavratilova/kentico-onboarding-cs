@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CachedItemsProviderTests.cs" />
     <Compile Include="Services\ListCacheTests.cs" />
+    <Compile Include="Services\AdditionServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

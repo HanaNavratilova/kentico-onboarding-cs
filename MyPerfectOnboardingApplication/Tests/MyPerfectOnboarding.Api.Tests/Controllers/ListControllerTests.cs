@@ -40,6 +40,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             },
         };
 
+        private IAdditionService _additionService;
         private IUrlLocator _location;
         private IListCache _cache;
 
@@ -47,9 +48,10 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         public void Init()
         {
             _location = Substitute.For<IUrlLocator>();
+            _additionService = Substitute.For<IAdditionService>();
             _cache = Substitute.For<IListCache>();
 
-            _listController = new ListController(_location, _cache)
+            _listController = new ListController(_location, _additionService, _cache)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -106,7 +108,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
                 LastUpdateTime = new DateTime(1896, 4, 7)
             };
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
-            _cache.AddItemAsync(newItem).Returns(createdItem);
+            _additionService.AddItemAsync(newItem).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).PostAsync(newItem));
