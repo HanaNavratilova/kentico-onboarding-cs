@@ -47,6 +47,7 @@
     <Compile Include="ServicesBootstraper.cs" />
     <Compile Include="Services\CachedItemsProvider.cs" />
     <Compile Include="Services\Extensions\ConcurrentDictionaryExtensions.cs" />
+    <Compile Include="Services\EditingService.cs" />
     <Compile Include="Services\ListCache.cs" />
     <Compile Include="Services\AdditionService.cs" />
   </ItemGroup>

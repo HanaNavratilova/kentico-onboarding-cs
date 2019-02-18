@@ -41,6 +41,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         };
 
         private IAdditionService _additionService;
+        private IEditingService _editingService;
         private IUrlLocator _location;
         private IListCache _cache;
 
@@ -49,9 +50,10 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             _location = Substitute.For<IUrlLocator>();
             _additionService = Substitute.For<IAdditionService>();
+            _editingService = Substitute.For<IEditingService>();
             _cache = Substitute.For<IListCache>();
 
-            _listController = new ListController(_location, _additionService, _cache)
+            _listController = new ListController(_location, _additionService, _editingService, _cache)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -127,11 +129,25 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
             var item = new ListItem { Text = "newItem" };
+            var editedItem = new ListItem
+            {
+                Id = id,
+                Text = "newItem",
+                IsActive = false,
+                CreationTime = new DateTime(1589, 12, 3),
+                LastUpdateTime = new DateTime(1896, 4, 7)
+            };
+            _editingService.ReplaceItemAsync(id, item).Returns(editedItem);
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
+            message.TryGetContentValue(out ListItem resultItem);
 
-            await _cache.Received().ReplaceItemAsync(item);
-            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+            Assert.Multiple(async () =>
+            {
+                await _editingService.Received(1).ReplaceItemAsync(id, item);
+                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(resultItem, Is.EqualTo(editedItem).UsingComparer());
+            });
         }
 
         [Test]

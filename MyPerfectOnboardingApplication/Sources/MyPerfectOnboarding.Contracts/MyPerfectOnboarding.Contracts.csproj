@@ -55,6 +55,7 @@
     <Compile Include="Services\Generators\ITimeGenerator.cs" />
     <Compile Include="Database\IConnectionDetails.cs" />
     <Compile Include="Services\ListItems\ICachedItemsProvider.cs" />
+    <Compile Include="Services\ListItems\IEditingService.cs" />
     <Compile Include="Services\ListItems\IListCache.cs" />
     <Compile Include="Services\ListItems\IAdditionService.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />

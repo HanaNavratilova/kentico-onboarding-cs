@@ -31,7 +31,11 @@ namespace MyPerfectOnboarding.Database.Repository
             => await _collection.FindOneAndDeleteAsync(item => item.Id == id);
 
         public async Task<ListItem> ReplaceItemAsync(ListItem editedItem)
-            => await _collection.FindOneAndReplaceAsync(item => item.Id == editedItem.Id, editedItem);
+        {
+            // Database returns from FindAndReplace function original item. However, the edited item should be returned.
+            await _collection.FindOneAndReplaceAsync(item => item.Id == editedItem.Id, editedItem);
+            return editedItem;
+        }
 
         public async Task<IEnumerable<ListItem>> GetAllItemsAsync()
             => await _collection.Find(FilterDefinition<ListItem>.Empty).ToListAsync();
