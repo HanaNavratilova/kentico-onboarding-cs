@@ -54,6 +54,7 @@
     <Compile Include="Services\Generators\IGuidGenerator.cs" />
     <Compile Include="Services\Generators\ITimeGenerator.cs" />
     <Compile Include="Database\IConnectionDetails.cs" />
+    <Compile Include="Services\ListItem\IEditingService.cs" />
     <Compile Include="Services\ListItem\IListCache.cs" />
     <Compile Include="Services\ListItem\IAdditionService.cs" />
     <Compile Include="Services\Location\IControllersRouteNames.cs" />

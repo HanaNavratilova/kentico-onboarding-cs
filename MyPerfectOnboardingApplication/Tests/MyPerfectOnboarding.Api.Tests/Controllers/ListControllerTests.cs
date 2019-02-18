@@ -40,6 +40,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         };
 
         private IAdditionService _additionService;
+        private IEditingService _editingService;
         private IUrlLocator _location;
         private IListCache _cache;
 
@@ -48,9 +49,10 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         {
             _location = Substitute.For<IUrlLocator>();
             _additionService = Substitute.For<IAdditionService>();
+            _editingService = Substitute.For<IEditingService>();
             _cache = Substitute.For<IListCache>();
 
-            _listController = new ListController(_location, _additionService, _cache)
+            _listController = new ListController(_location, _additionService, _editingService, _cache)
             {
                 Request = new HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -129,7 +131,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
 
             var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
 
-            await _cache.Received().ReplaceItemAsync(item);
+            await _editingService.Received().ReplaceItemAsync(item);
             Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         }
 

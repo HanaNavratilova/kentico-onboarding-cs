@@ -17,12 +17,14 @@ namespace MyPerfectOnboarding.Api.Controllers
         
         private readonly IUrlLocator _urlLocation;
         private readonly IAdditionService _additionService;
+        private readonly IEditingService _editingService;
         private readonly IListCache _cache;
 
-        public ListController(IUrlLocator urlLocation, IAdditionService additionService, IListCache cache)
+        public ListController(IUrlLocator urlLocation, IAdditionService additionService, IEditingService editingService, IListCache cache)
         {
             _urlLocation = urlLocation;
             _additionService = additionService;
+            _editingService = editingService;
             _cache = cache;
         }
 
@@ -50,7 +52,7 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
-            await _cache.ReplaceItemAsync(editedItem);
+            await _editingService.ReplaceItemAsync(editedItem);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

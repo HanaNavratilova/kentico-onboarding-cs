@@ -61,6 +61,7 @@
     <Compile Include="Generators\GuidGeneratorTests.cs" />
     <Compile Include="Generators\TimeGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EditingServiceTests.cs" />
     <Compile Include="Services\ListCacheTests.cs" />
     <Compile Include="Services\AdditionServiceTests.cs" />
   </ItemGroup>
