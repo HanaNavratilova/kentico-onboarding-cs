@@ -5,10 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MyPerfectOnboarding.Api.Controllers;
-using MyPerfectOnboarding.Api.Tests.Utils;
 using MyPerfectOnboarding.Contracts.Database;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.Location;
+using MyPerfectOnboarding.Tests.Utils.Extensions;
 using NSubstitute;
 using NUnit.Framework;
 
