@@ -30,7 +30,7 @@ namespace MyPerfectOnboarding.Dependency
         internal void RegisterTypes(IContainer container)
             => container
                 .RegisterBootstraper<DatabaseBootstraper>()
-                .RegisterBootstraper<ServicesBootstraper>()
+                .RegisterBootstraper<ApiServicesBootstraper>()
                 .Register(_connectionDetails)
                 .Register(_routeNames)
                 .Register(container);
