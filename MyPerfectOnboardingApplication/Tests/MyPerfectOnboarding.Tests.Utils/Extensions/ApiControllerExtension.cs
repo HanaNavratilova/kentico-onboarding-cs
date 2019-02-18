@@ -8,7 +8,8 @@ namespace MyPerfectOnboarding.Tests.Utils.Extensions
 {
     public static class ApiControllerExtension
     {
-        public static async Task<HttpResponseMessage> ExecuteAction(this ApiController controller, Func<ApiController, Task<IHttpActionResult>> action)
+        public static async Task<HttpResponseMessage> ExecuteAction<TController>(this TController controller, Func<TController, Task<IHttpActionResult>> action)
+            where TController: ApiController
         {
             var response = await action(controller);
 

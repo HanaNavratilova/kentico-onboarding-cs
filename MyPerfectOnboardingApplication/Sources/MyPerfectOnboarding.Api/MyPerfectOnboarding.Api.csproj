@@ -110,6 +110,7 @@
     <Compile Include="App_Start\RoutesConfig.cs" />
     <Compile Include="Configuration\ConnectionDetails.cs" />
     <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="Extensions\ItemValidationExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

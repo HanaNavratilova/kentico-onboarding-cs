@@ -65,15 +65,15 @@ namespace MyPerfectOnboarding.Services.Tests.Services
             _listCache.GetItemAsync(id).Returns(item);
             _timeGenerator.GetCurrentTime().Returns(updateTime, DateTime.MinValue);
 
-            await _editingService.ReplaceItemAsync(id, editedItem);
+            await _editingService.ReplaceItemAsync(item.Id, editedItem);
 
             await _listCache.Received(1).ReplaceItemAsync(ArgExtended.IsListItem(expectedItem));
         }
 
         [Test]
         public void ReplaceItemAsync_NonexistingId_ThrowsException()
-        {          
-            var item = new ListItem{ Id = Guid.Parse("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC") };
+        {        
+            var item = new ListItem { Id = Guid.Parse("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC")};
 
             _listCache.GetItemAsync(item.Id).Throws<ArgumentException>();
 

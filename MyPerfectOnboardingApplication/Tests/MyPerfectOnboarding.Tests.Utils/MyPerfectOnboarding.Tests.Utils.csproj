@@ -68,7 +68,7 @@
     <Compile Include="Comparers\ListItemEqualityComparer.cs" />
     <Compile Include="Extensions\ApiControllerExtension.cs" />
     <Compile Include="Extensions\ArgExtended.cs" />
-    <Compile Include="Extensions\EqualConstraintExtension.cs" />
+    <Compile Include="Extensions\EqualConstraintExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

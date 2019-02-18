@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
+using MyPerfectOnboarding.Api.Extensions;
 using MyPerfectOnboarding.Contracts.Models;
 using MyPerfectOnboarding.Contracts.Services.ListItems;
 using MyPerfectOnboarding.Contracts.Services.Location;
@@ -13,8 +14,7 @@ namespace MyPerfectOnboarding.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     [Route("")]
     public class ListController : ApiController
-    {
-        
+    {  
         private readonly IUrlLocator _urlLocation;
         private readonly IAdditionService _additionService;
         private readonly IEditingService _editingService;
@@ -34,15 +34,27 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}", Name = "GetListItem")]
         public async Task<IHttpActionResult> GetAsync(Guid id)
         {
+            if (!ModelState.ValidateRequestId(id).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var item = await _cache.GetItemAsync(id);
             if (item == null)
+            {
                 return NotFound();
+            }
 
             return Ok(item);
         }
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
+            if (!ModelState.ValidateBeforeAddition(item).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var newItem = await _additionService.AddItemAsync(item);
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
@@ -52,6 +64,16 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
         {
+            if (!ModelState.ValidateBeforeEditing(id, editedItem).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return await PostAsync(editedItem);
+            }
+
             var item = await _editingService.ReplaceItemAsync(id, editedItem);
 
             return Ok(item);
@@ -60,6 +82,16 @@ namespace MyPerfectOnboarding.Api.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
+            if (!ModelState.ValidateRequestId(id).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return NotFound();
+            }
+
             await _cache.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
