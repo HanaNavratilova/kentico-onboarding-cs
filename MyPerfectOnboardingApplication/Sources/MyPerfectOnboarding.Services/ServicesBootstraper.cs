@@ -10,7 +10,8 @@ namespace MyPerfectOnboarding.Services
     {
         public IContainer RegisterTypesTo(IContainer container)
             => container
-                .Register<IListCache, ListCache>(Lifetime.PerApplication)
+                .Register<IAdditionService, AdditionService>(Lifetime.PerRequest)
+                .Register<IListCache, ListCache>(Lifetime.PerApplication) 
                 .Register<IGuidGenerator, GuidGenerator>(Lifetime.PerApplication)
                 .Register<ITimeGenerator, TimeGenerator>(Lifetime.PerApplication);
     }

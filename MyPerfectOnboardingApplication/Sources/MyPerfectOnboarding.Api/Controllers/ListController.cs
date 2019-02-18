@@ -16,11 +16,13 @@ namespace MyPerfectOnboarding.Api.Controllers
     {
         
         private readonly IUrlLocator _urlLocation;
+        private readonly IAdditionService _additionService;
         private readonly IListCache _cache;
 
-        public ListController(IUrlLocator urlLocation, IListCache cache)
+        public ListController(IUrlLocator urlLocation, IAdditionService additionService, IListCache cache)
         {
             _urlLocation = urlLocation;
+            _additionService = additionService;
             _cache = cache;
         }
 
@@ -39,7 +41,7 @@ namespace MyPerfectOnboarding.Api.Controllers
 
         public async Task<IHttpActionResult> PostAsync(ListItem item)
         {
-            var newItem = await _cache.AddItemAsync(item);
+            var newItem = await _additionService.AddItemAsync(item);
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
             return Created(location, newItem);
