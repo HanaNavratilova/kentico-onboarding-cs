@@ -45,6 +45,7 @@
     <Compile Include="Generators\TimeGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesBootstraper.cs" />
+    <Compile Include="Services\ListCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyPerfectOnboarding.Contracts\MyPerfectOnboarding.Contracts.csproj">

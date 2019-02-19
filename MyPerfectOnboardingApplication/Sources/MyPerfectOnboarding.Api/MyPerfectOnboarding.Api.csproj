@@ -139,10 +139,6 @@
       <Project>{f9d88a7d-64f2-42f4-8e6d-ebf7222efbfa}</Project>
       <Name>MyPerfectOnboarding.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyPerfectOnboarding.Database\MyPerfectOnboarding.Database.csproj">
-      <Project>{b8be968d-19ec-49bb-8e3b-0d5a6ab231b6}</Project>
-      <Name>MyPerfectOnboarding.Database</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MyPerfectOnboarding.Dependency\MyPerfectOnboarding.Dependency.csproj">
       <Project>{83eac366-b50f-438e-9034-e9faef7279c0}</Project>
       <Name>MyPerfectOnboarding.Dependency</Name>
