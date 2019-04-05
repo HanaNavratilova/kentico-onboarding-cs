@@ -12,7 +12,7 @@ using System.Web.Http.Hosting;
 using System.Web.Http.Metadata;
 using System.Web.Http.Validation;
 
-namespace MyPerfectOnboarding.Dependency
+namespace MyPerfectOnboarding.Dependency.DependencyResolvers
 {
     internal class DependencyResolver : IDependencyResolver
     {
