@@ -105,7 +105,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\TestCasesData\ViewModelItem.cs" />
+    <Compile Include="Controllers\TestCasesData\PostBadRequestTestCases.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
+    <Compile Include="Controllers\TestCasesData\PutBadRequestTestCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

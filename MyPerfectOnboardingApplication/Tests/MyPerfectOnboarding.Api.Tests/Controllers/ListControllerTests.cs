@@ -6,11 +6,12 @@ using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MyPerfectOnboarding.Api.Models;
+using MyPerfectOnboarding.Api.Tests.Controllers.TestCasesData;
 using MyPerfectOnboarding.Contracts.Services.ListItems;
 using MyPerfectOnboarding.Tests.Utils.Builders;
 using MyPerfectOnboarding.Tests.Utils.Comparers;
@@ -64,7 +65,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_ExistingId_ReturnsItemWithGivenId()
         {
-            var expectedItem = ListItemBuilder.CreateItem("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC", "aaaaa", "1589-12-03", "1896-04-07", true);
+            var expectedItem = ListItemBuilder.CreateItem("E1AC8C1A-5E51-4B63-B982-37D1D04705A1", "aaaaa", "1589-12-03", "1896-04-07", true);
             _cache.ExistsItemWithIdAsync(expectedItem.Id).Returns(true);
             _cache.GetItemAsync(expectedItem.Id).Returns(Task.FromResult(expectedItem));
 
@@ -94,7 +95,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Get_NonexistentId_ReturnsNotFound()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+            var id = new Guid("DE181743-EE7C-408B-BC3B-9217622625B1");
             _cache.ExistsItemWithIdAsync(id).Returns(false);
 
             var message = await _listController.ExecuteAction(controller => controller.GetAsync(id));
@@ -105,10 +106,10 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Post_ItemOnlyWithNonemptyText_CreatedReturned()
         {
-            var createdItem = ListItemBuilder.CreateItem("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC", "aaaaa", "1589-12-03", "1896-04-07", true);
-            var newItem = ListItemViewModelBuilder.CreateItem("newItemText");
+            var createdItem = ListItemBuilder.CreateItem("EE7DAC75-B63B-4FD9-9EB4-9F3641438290", "aaaaa", "1589-12-03", "1896-04-07", true);
+            var newItem = ViewModelItem.WithText;
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
-            _additionService.AddItemAsync(Arg.Is<ListItem>(listItem => ListItemEqualityComparer.Instance.Equals(listItem, newItem))).Returns(createdItem);
+            _additionService.AddItemAsync(ArgExtended.IsListItem(newItem)).Returns(createdItem);
             _location.GetListItemLocation(createdItem.Id).Returns(expectedUri);
 
             var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
@@ -122,112 +123,16 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             });
         }
 
-        [Test]
-        public async Task Post_ItemOnlyWithEmptyText_BadRequestReturned()
+        [TestCaseSource(typeof(PostBadRequestTestCases))]
+        public async Task Post_BadRequestReturned(ListItemViewModel item, string[] expectedModelStateKeys)
         {
-            var newItem = ListItemViewModelBuilder.CreateItem(string.Empty);
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
+            var message = await _listController.ExecuteAction(controller => controller.PostAsync(item));
             message.TryGetContentValue(out HttpError error);
 
             Assert.Multiple(() =>
             {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Text)));
-            });
-        }
-
-        [Test]
-        public async Task Post_ItemWithNonemptyTextAndId_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", "aaa");
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
-            });
-        }
-
-
-        [Test]
-        public async Task Post_ItemWithNonemptyTextAndCreationTime_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem(null, "aaa", "2014-12-31");
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Post_ItemWithNonemptyTextAndCreationTimeAndId_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", "aaa", "2014-12-31");
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Post_ItemWithNonemptyTextAndCreationTimeAnLastUpdateTime_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem(null, "aaa", "2014-12-31", "2018-11-25");
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.LastUpdateTime)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Post_ItemWithEmptyText_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem(string.Empty);
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Text)));
-            });
-        }
-
-        [Test]
-        public async Task Post_ItemWithEmptyTextAndId_BadRequestReturned()
-        {
-            var newItem = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", string.Empty);
-
-            var message = await _listController.ExecuteAction(controller => controller.PostAsync(newItem));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Text)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
+                Assert.That(error.ModelState.Keys, Is.EquivalentTo(expectedModelStateKeys));
             });
         }
 
@@ -254,23 +159,11 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         }
 
         [Test]
-        public async Task Put_InvalidId_BadRequestReturned()
-        {
-            var id = Guid.Empty;
-            var item = ListItemViewModelBuilder.CreateItem("newItem");
-
-            var message = await _listController.ExecuteAction(controller => ((ListController)controller).PutAsync(id, item));
-            message.TryGetContentValue(out ListItem resultItem);
-
-            Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-        }
-
-        [Test]
         public async Task Put_NonexistingIdItem_CreatedReturned()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1689");
-            var item = ListItemViewModelBuilder.CreateItem("newItem");
-            var createdItem = ListItemBuilder.CreateItem("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC", "aaaaa", "1589-12-03", "1896-04-07", true);
+            var id = new Guid("9DD010C6-8044-438C-B293-643102935565");
+            var item = ViewModelItem.WithText;
+            var createdItem = ListItemBuilder.CreateItem("62F9BB31-AE2F-4E73-AA70-B373F72BE754", "aaaaa", "1589-12-03", "1896-04-07", true);
             _cache.ExistsItemWithIdAsync(id).Returns(false);
             var expectedUri = new Uri($"http://www.aaa.com/{createdItem.Id}");
             _additionService
@@ -289,123 +182,23 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
             });
         }
 
-        [Test]
-        public async Task Put_NullItem_BadRequest()
+        [TestCaseSource(typeof(PutBadRequestTestCases))]
+        public async Task Put_BadRequestReturned(Guid id, ListItemViewModel item, string[] expectedModelStateKeys)
         {
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, null));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem)));
-            });
-        }
-
-        [Test]
-        public async Task Put_ItemOnlyWithEmptyText_BadRequestReturned()
-        {
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var item = ListItemViewModelBuilder.CreateItem(string.Empty);
-
             var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
             message.TryGetContentValue(out HttpError error);
 
             Assert.Multiple(() =>
             {
                 Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Text)));
-            });
-        }
-
-        [Test]
-        public async Task Put_ItemWithNonemptyTextAndId_BadRequestReturned()
-        {
-            var item = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", "aaa");
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(item.Id, item));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
-            });
-        }
-
-
-        [Test]
-        public async Task Put_ItemWithNonemptyTextAndCreationTime_BadRequestReturned()
-        {
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var item = ListItemViewModelBuilder.CreateItem(null, "aaa", "2014-12-31");
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Put_ItemWithNonemptyTextAndCreationTimeAndId_BadRequestReturned()
-        {
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var item = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", "aaa", "2014-12-31");
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Put_ItemWithNonemptyTextAndCreationTimeAnLastUpdateTime_BadRequestReturned()
-        {
-            var id = new Guid("0B9E6EAF-83DC-4A99-9D57-A39FAF258CAC");
-            var item = ListItemViewModelBuilder.CreateItem(null, "aaa", "2014-12-31", "2018-11-25");
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(id, item));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.LastUpdateTime)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.CreationTime)));
-            });
-        }
-
-        [Test]
-        public async Task Put_ItemWithEmptyTextAndId_BadRequestReturned()
-        {
-            var item = ListItemViewModelBuilder.CreateItem("22AC59B7-9517-4EDD-9DDD-EB418A7C1689", String.Empty);
-
-            var message = await _listController.ExecuteAction(controller => controller.PutAsync(item.Id, item));
-            message.TryGetContentValue(out HttpError error);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(message.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Text)));
-                Assert.That(error.ModelState, Does.ContainKey(nameof(IListItem.Id)));
+                Assert.That(error.ModelState.Keys, Is.EquivalentTo(expectedModelStateKeys));
             });
         }
 
         [Test]
         public async Task Delete_Id_NoContentReturned()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+            var id = new Guid("54109CC2-D8A1-497E-BD65-F76DE46D86E4");
             _cache.ExistsItemWithIdAsync(id).Returns(true);
 
             var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
@@ -432,7 +225,7 @@ namespace MyPerfectOnboarding.Api.Tests.Controllers
         [Test]
         public async Task Delete_NonexistingId_NotFoundReturned()
         {
-            var id = new Guid("22AC59B7-9517-4EDD-9DDD-EB418A7C1678");
+            var id = new Guid("A0BF4FCF-6610-4103-8423-74EA5A0F56A3");
             _cache.ExistsItemWithIdAsync(id).Returns(false);
 
             var message = await _listController.ExecuteAction(controller => controller.DeleteAsync(id));
