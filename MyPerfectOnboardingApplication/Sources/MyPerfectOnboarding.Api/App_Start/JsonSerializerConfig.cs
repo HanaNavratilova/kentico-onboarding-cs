@@ -9,8 +9,7 @@ namespace MyPerfectOnboarding.Api
         {
             var jsonFormatter = config.Formatters.JsonFormatter;
 
-            jsonFormatter.SerializerSettings.ContractResolver =
-                new CamelCasePropertyNamesContractResolver();
+            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             jsonFormatter.UseDataContractJsonSerializer = false;
         }
     }

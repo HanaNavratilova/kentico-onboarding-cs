@@ -3,8 +3,10 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Web.Http;
-using MyPerfectOnboarding.Contracts.Database;
+using MyPerfectOnboarding.Api.Extensions;
+using MyPerfectOnboarding.Api.Models;
 using MyPerfectOnboarding.Contracts.Models;
+using MyPerfectOnboarding.Contracts.Services.ListItems;
 using MyPerfectOnboarding.Contracts.Services.Location;
 
 namespace MyPerfectOnboarding.Api.Controllers
@@ -13,43 +15,86 @@ namespace MyPerfectOnboarding.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     [Route("")]
     public class ListController : ApiController
-    {
-        private readonly IListRepository _listRepository;
+    {  
         private readonly IUrlLocator _urlLocation;
+        private readonly IAdditionService _additionService;
+        private readonly IEditingService _editingService;
+        private readonly IListCache _cache;
 
-        public ListController(IListRepository listRepository, IUrlLocator urlLocation)
+        public ListController(IUrlLocator urlLocation, IAdditionService additionService, IEditingService editingService, IListCache cache)
         {
-            _listRepository = listRepository;
             _urlLocation = urlLocation;
+            _additionService = additionService;
+            _editingService = editingService;
+            _cache = cache;
         }
 
         public async Task<IHttpActionResult> GetAsync()
-            => Ok(await _listRepository.GetAllItemsAsync());
+            => Ok(await _cache.GetAllItemsAsync().ToViewModelsAsync());
 
         [Route("{id}", Name = "GetListItem")]
-        public async Task<IHttpActionResult> GetAsync(Guid id) 
-            => Ok(await _listRepository.GetItemAsync(id));
-
-        public async Task<IHttpActionResult> PostAsync(ListItem item)
+        public async Task<IHttpActionResult> GetAsync(Guid id)
         {
-            var newItem = await _listRepository.AddItemAsync(item);
+            if (!ModelState.ValidateRequestId(id).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return NotFound();
+            }
+
+            var item = await _cache.GetItemAsync(id);
+
+            return Ok(item.ToViewModel());
+        }
+
+        public async Task<IHttpActionResult> PostAsync(ListItemViewModel item)
+        {
+            if (!ModelState.ValidateBeforeAddition(item).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var newItem = await _additionService.AddItemAsync(item.AsImmutable());
             var location = _urlLocation.GetListItemLocation(newItem.Id);
 
-            return Created(location, newItem);
+            return Created(location, newItem.ToViewModel());
         }
 
         [Route("{id}")]
-        public async Task<IHttpActionResult> PutAsync(Guid id, ListItem editedItem)
+        public async Task<IHttpActionResult> PutAsync(Guid id, ListItemViewModel editedItem)
         {
-            await _listRepository.ReplaceItemAsync(editedItem);
+            if (!ModelState.ValidateBeforeEditing(id, editedItem).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return await PostAsync(editedItem);
+            }
+
+            var item = await _editingService.ReplaceItemAsync(id, editedItem.AsImmutable());
+
+            return Ok(item.ToViewModel());
         }
 
         [Route("{id}")]
         public async Task<IHttpActionResult> DeleteAsync(Guid id)
         {
-            await _listRepository.DeleteItemAsync(id);
+            if (!ModelState.ValidateRequestId(id).IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!await _cache.ExistsItemWithIdAsync(id))
+            {
+                return NotFound();
+            }
+
+            await _cache.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

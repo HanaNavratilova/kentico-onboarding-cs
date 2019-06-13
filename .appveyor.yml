@@ -2,3 +2,18 @@ image: Visual Studio 2017
 
 install:
 - cmd: nuget restore MyPerfectOnboardingApplication/MyPerfectOnboardingApplication.sln
+
+build_script:
+- choco install "msbuild-sonarqube-runner" -y
+- SonarScanner.MSBuild.exe begin /k:"HanaNavratilova_kentico-onboarding-cs" /o:"hananavratilova-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="9414e93d3e7734b473c27c5b93f290583ff1c1da"
+- msbuild "MyPerfectOnboardingApplication/MyPerfectOnboardingApplication.sln"
+- SonarScanner.MSBuild.exe end /d:sonar.login="9414e93d3e7734b473c27c5b93f290583ff1c1da"
+
+test:
+  assemblies:
+    except:
+      - ./MyPerfectOnboardingApplication/Tests/MyPerfectOnboarding.Api.Tests/bin/Debug/MyPerfectOnboarding.Tests.Utils.dll
+      - ./MyPerfectOnboardingApplication/Tests/MyPerfectOnboarding.Services.Tests/bin/Debug/MyPerfectOnboarding.Tests.Utils.dll
+      - ./MyPerfectOnboardingApplication/Tests/MyPerfectOnboarding.Tests.Utils/bin/Debug/MyPerfectOnboarding.Tests.Utils.dll
+      - ./MyPerfectOnboardingApplication/Tests/MyPerfectOnboarding.Tests.Utils/bin/Debug/MyPerfectOnboarding.Tests.Utils.dll
+      - ./MyPerfectOnboardingApplication/Tests/MyPerfectOnboarding.Application.Tests/bin/Debug/MyPerfectOnboarding.Tests.Utils.dll
